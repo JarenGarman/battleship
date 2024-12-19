@@ -1,0 +1,17 @@
+require:
+  - rubocop-performance
+  - rubocop-require_tools
+  - rubocop-rspec
+  - rubocop-thread_safety
+AllCops:
+  NewCops: enable
+  ParserEngine: parser_prism
+  TargetRubyVersion: 3.3
+Style/FrozenStringLiteralComment:
+  EnforcedStyle: always_true
+  SafeAutoCorrect: true
+RSpec/DescribedClass:
+  SafeAutoCorrect: true
+Naming/FileName:
+  Exclude:
+    - Gemfile
