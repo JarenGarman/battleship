@@ -2,13 +2,17 @@
 
 ## Donte Handy and Jaren Garman
 
-## References
+### References
 
-[Project Homepage](https://curriculum.turing.edu/module1/projects/battleship/)
+---
 
-[Git for Pairs Lesson](https://curriculum.turing.edu/module1/lessons/git_for_pairs)
+#### Links
 
-### Common Git Commands
+- [Project Homepage](https://curriculum.turing.edu/module1/projects/battleship/)
+
+- [Git for Pairs Lesson](https://curriculum.turing.edu/module1/lessons/git_for_pairs)
+
+#### Common Git Commands
 
 - `git clone <repo-url>`
 - `git pull origin main`
