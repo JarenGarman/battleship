@@ -3,7 +3,6 @@
 source 'https://rubygems.org'
 
 group :development, :test do
-  gem 'prism', require: false
   gem 'pry', require: false
   gem 'pry-byebug', require: false
   gem 'rspec', require: false
@@ -11,6 +10,7 @@ group :development, :test do
 end
 
 group :development do
+  gem 'prism', require: false
   gem 'rubocop', require: false
   gem 'rubocop-performance', require: false
   gem 'rubocop-require_tools', require: false
