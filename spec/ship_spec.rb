@@ -17,5 +17,26 @@ RSpec.describe Ship do
     it 'has health equal to length' do
       expect(ship.health).to eq(3)
     end
+
+    it 'is not sunk' do
+      expect(ship.sunk?).to be false
+    end
+  end
+
+  describe '#hit' do
+    before do
+      ship.hit
+    end
+
+    it 'can hit a ship' do
+      expect(ship.health).to eq(2)
+    end
+
+    it 'can sink a ship' do
+      ship.hit
+      ship.hit
+
+      expect(ship.sunk?).to be true
+    end
   end
 end
