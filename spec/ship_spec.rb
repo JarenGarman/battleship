@@ -38,5 +38,12 @@ RSpec.describe Ship do
 
       expect(ship.sunk?).to be true
     end
+
+    it 'cannot hit a sunken ship' do
+      ship.hit
+      ship.hit
+
+      expect(ship.hit).to be_nil
+    end
   end
 end
