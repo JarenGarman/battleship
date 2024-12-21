@@ -3,7 +3,7 @@ class Cell
 
   def initialize(coordinate) #(coordinate) is an argument passed to the initialize method - ie "B4"
     @coordinate = coordinate
-    @ship = nil #ship is an instance variable and is set to nil
+    @ship = nil
   end
 
   def empty? 

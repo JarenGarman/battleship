@@ -1,7 +1,5 @@
 require 'spec_helper'
 
-#tried to run wih spec_helper but it was not working - hard coded in
-
 RSpec.describe Cell do
   it 'exists' do
     cell = Cell.new("B4")
