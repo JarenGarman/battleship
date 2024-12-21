@@ -25,4 +25,3 @@ RSpec.describe Cell do
     expect(cell.empty?).to be false #expect the empty? method to return false
   end
 end
-
