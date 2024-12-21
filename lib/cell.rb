@@ -6,7 +6,7 @@ class Cell
     @ship = nil
   end
 
-  def empty? 
+  def empty? #empty? method checks if a cell is empty
     @ship.nil?
   end
 
