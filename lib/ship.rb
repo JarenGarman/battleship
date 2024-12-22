@@ -3,8 +3,8 @@ class Ship
 
   def initialize(name, length)
     @name = name
-    @length = length
-    @health = length # Initially, the health of the ship is equal to its length
+    @length = length # The length of the ship is passed as an argument
+    @health = length # Initially, the health of the ship is equal to its length. *kss?
   end
 
   def hit
