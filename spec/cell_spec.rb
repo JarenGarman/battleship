@@ -75,13 +75,13 @@ RSpec.describe Cell do
       end
 
       context 'and the cell has not been fired upon' do
-        context 'and the debug boolean is false' do
+        context 'and debug is false' do
           it { is_expected.to eq('.') }
         end
 
-        context 'and the debug boolean is true' do
+        context 'and debug is true' do
           it 'is expected to eq "S"' do
-            expect(cell.render(true)).to eq('S')
+            expect(cell.render(debug: true)).to eq('S')
           end
         end
       end
