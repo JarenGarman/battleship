@@ -56,11 +56,11 @@ RSpec.describe Cell do
     subject(:render) { cell.render }
 
     context 'when the cell has no ship' do
-      context 'when the cell has not been fired upon' do
+      context 'and the cell has not been fired upon' do
         it { is_expected.to eq('.') }
       end
 
-      context 'when the cell has been fired upon' do
+      context 'and the cell has been fired upon' do
         before do
           cell.fire_upon
         end
@@ -74,28 +74,28 @@ RSpec.describe Cell do
         cell.place_ship(cruiser)
       end
 
-      context 'when the cell has not been fired upon' do
-        context 'when the debug boolean is false' do
+      context 'and the cell has not been fired upon' do
+        context 'and the debug boolean is false' do
           it { is_expected.to eq('.') }
         end
 
-        context 'when the debug boolean is true' do
+        context 'and the debug boolean is true' do
           it 'is expected to eq "S"' do
             expect(cell.render(true)).to eq('S')
           end
         end
       end
 
-      context 'when the cell has been fired upon' do
+      context 'and the cell has been fired upon' do
         before do
           cell.fire_upon
         end
 
-        context 'when the ship is not sunk' do
+        context 'and the ship is not sunk' do
           it { is_expected.to eq('H') }
         end
 
-        context 'when the ship is sunk' do
+        context 'and the ship is sunk' do
           before do
             cruiser.hit
             cruiser.hit
