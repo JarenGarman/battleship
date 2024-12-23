@@ -5,7 +5,6 @@ class Cell
   # (coordinate) is an argument passed to the initialize method - ie "B4"
   def initialize(coordinate)
     @coordinate = coordinate
-    @ship = nil
     @fired_upon = false
   end
 
