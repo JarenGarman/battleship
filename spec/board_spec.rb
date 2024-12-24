@@ -23,4 +23,18 @@ RSpec.describe Board do
       end
     end
   end
+
+  describe '#valid_coordinate?' do
+    context 'when passed a valid coordinate' do
+      subject(:valid) { board.valid_coordinate?('A1') }
+
+      it { is_expected.to be true }
+    end
+
+    context 'when passed an invalid coordinate' do
+      subject(:invalid) { board.valid_coordinate?('A5') }
+
+      it { is_expected.to be false }
+    end
+  end
 end
