@@ -8,5 +8,11 @@ RSpec.describe Board do
 
   describe '#initialize' do
     it { is_expected.to be_instance_of(described_class) }
+
+    describe '#cells' do
+      subject(:cells) { board.cells }
+
+      it { is_expected.to be_a(Hash) }
+    end
   end
 end
