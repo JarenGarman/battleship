@@ -13,6 +13,14 @@ RSpec.describe Board do
       subject(:cells) { board.cells }
 
       it { is_expected.to be_a(Hash) }
+
+      it 'has sixteen entries' do
+        expect(cells.size).to eq(16)
+      end
+
+      it 'has values that are all Cells' do
+        expect(cells.values.all?(Cell)).to be true
+      end
     end
   end
 end
