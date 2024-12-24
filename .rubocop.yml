@@ -9,6 +9,10 @@ AllCops:
   TargetRubyVersion: 3.3
 Style/FrozenStringLiteralComment:
   Enabled: false
+RSpec/NestedGroups:
+  Enabled: false
+RSpec/ContextWording:
+  Enabled: false
 RSpec/DescribedClass:
   SafeAutoCorrect: true
 Naming/FileName:
