@@ -16,4 +16,11 @@ class Board
   def valid_coordinate?(coordinate)
     @cells.key?(coordinate)
   end
+
+  def valid_placement?(ship, coordinates) #method to validate the placement of a ship on the board
+    # Add logic to validate the placement of the ship on the board
+    # For example, check if the coordinates are consecutive and fit the ship's length
+    coordinates.all? { |coordinate| valid_coordinate?(coordinate) } &&
+      coordinates.size == ship.length #checks if the coordinates are valid and the size of the coordinates is equal to the length of the ship
+  end
 end
