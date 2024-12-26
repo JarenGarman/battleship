@@ -26,11 +26,11 @@ class Board
     cols = coordinates.map { |coordinate| coordinate[1..-1].to_i } #makes an array of the columns from the coordinates
     
     if rows.uniq.size == 1 #rows - array. uniq - no duplicates. size - returns the number of elements in the array. == 1 - if there is only one element in the array
-      # All coordinates are in the same row, check if columns are consecutive
+      
       return cols.each_cons(2).all? { |a, b| b == a + 1 } #iterates through the columns - checks if next column is next number
     elsif cols.uniq.size == 1 
-      # All coordinates are in the same column, check if rows are consecutive
-      return rows.each_cons(2).all? { |a, b| b.ord == a.ord + 1 } #iterates through rows - checks if next row is next letter in the alphabet
+      
+      return rows.each_cons(2).all? { |a, b| b.ord == a.ord + 1 } #iterates through rows - checks if next row is next letter in alphabet
     else
       return false
     end
