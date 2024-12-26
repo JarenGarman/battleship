@@ -37,4 +37,30 @@ RSpec.describe Board do
       it { is_expected.to be false }
     end
   end
+
+  describe '#valid_placement?' do
+    it 'returns false for non-consecutive coordinates' do
+      expect(board.valid_placement?(submarine, ['A1', 'A3'])).to be false
+      expect(board.valid_placement?(submarine, ['A1', 'B2'])).to be false
+    end
+
+    it 'returns false for overlapping ships' do
+      board.place(cruiser, ['A1', 'A2', 'A3'])
+      expect(board.valid_placement?(submarine, ['A1', 'B1'])).to be false
+    end
+
+    it 'returns true for valid placements' do
+      expect(board.valid_placement?(cruiser, ['A1', 'A2', 'A3'])).to be true
+      expect(board.valid_placement?(submarine, ['B1', 'C1'])).to be true
+    end
+  end
+
+  describe '#place' do
+    it 'places a ship at the given coordinates' do
+      board.place(cruiser, ['A1', 'A2', 'A3'])
+      expect(board.cells['A1'].ship).to eq(cruiser)
+      expect(board.cells['A2'].ship).to eq(cruiser)
+      expect(board.cells['A3'].ship).to eq(cruiser)
+    end
+  end
 end
