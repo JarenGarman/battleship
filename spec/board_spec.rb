@@ -25,7 +25,7 @@ RSpec.describe Board do
   end
 
   describe '#valid_coordinate?' do #checks if a given coordinate is valid
-    context 'when passed a valid coordinate' do #context is similar to describe and used to group examples. specific state or condition
+    context 'when passed a valid coordinate' do #context is similar to describe and used to group examples. specific state/condition
       subject(:valid) { board.valid_coordinate?('A1') }
 
       it { is_expected.to be true }
@@ -40,7 +40,7 @@ RSpec.describe Board do
 
   describe '#valid_placement?' do #checks if a ship can be placed at the given coordinates
     it 'returns false for non-consecutive coordinates' do
-      expect(board.valid_placement?(submarine, %w[A1 A3])).to be false #%w is a shortcut for creating an array of strings 
+      expect(board.valid_placement?(submarine, %w[A1 A3])).to be false #%w is a shortcut for creating an array of strings - range is better for consecutive numbers
       expect(board.valid_placement?(submarine, %w[A1 B2])).to be false #diagnoal coordinates are not allowed
     end
 
