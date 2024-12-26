@@ -31,7 +31,7 @@ class Cell
 
   # fire_upon? & fire_upon are in Cell class because they are methods that are specific to the Cell class.
 
-  def render(debug = false) # rubocop:disable Style/OptionalBooleanParameter
+  def render(debug = false)
     if empty?
       return '.' unless fired_upon?
 
