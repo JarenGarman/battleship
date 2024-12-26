@@ -22,15 +22,15 @@ class Board
     return false unless coordinates.size == ship.length
     return false if coordinates.any? { |coordinate| !@cells[coordinate].empty? }
 
-    rows = coordinates.map { |coordinate| coordinate[0] } # Extract the row from the coordinate
-    cols = coordinates.map { |coordinate| coordinate[1..-1].to_i } # Extract the column from the coordinate
+    rows = coordinates.map { |coordinate| coordinate[0] } #makes an array of the rows from the coordinates
+    cols = coordinates.map { |coordinate| coordinate[1..-1].to_i } #makes an array of the columns from the coordinates
     
-    if rows.uniq.size == 1
+    if rows.uniq.size == 1 #rows - array. uniq - no duplicates. size - returns the number of elements in the array. == 1 - if there is only one element in the array
       # All coordinates are in the same row, check if columns are consecutive
-      return cols.each_cons(2).all? { |a, b| b == a + 1 }
-    elsif cols.uniq.size == 1
+      return cols.each_cons(2).all? { |a, b| b == a + 1 } #iterates through the columns - checks if next column is next number
+    elsif cols.uniq.size == 1 
       # All coordinates are in the same column, check if rows are consecutive
-      return rows.each_cons(2).all? { |a, b| b.ord == a.ord + 1 }
+      return rows.each_cons(2).all? { |a, b| b.ord == a.ord + 1 } #iterates through rows - checks if next row is next letter in the alphabet
     else
       return false
     end
@@ -40,7 +40,7 @@ class Board
     return unless valid_placement?(ship, coordinates)
 
     coordinates.each do |coordinate|
-      @cells[coordinate].place_ship(ship)
+      @cells[coordinate].place_ship(ship) 
     end
   end
 end
