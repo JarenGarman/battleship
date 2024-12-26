@@ -21,9 +21,9 @@ class Board
     return false unless coordinates.all? { |coordinate| valid_coordinate?(coordinate) }
     return false unless coordinates.size == ship.length
 
-    rows = coordinates.map { |coordinate| coordinate[0] }
-    cols = coordinates.map { |coordinate| coordinate[1..-1].to_i }
-
+    rows = coordinates.map { |coordinate| coordinate[0] } # Extract the row from the coordinate
+    cols = coordinates.map { |coordinate| coordinate[1..-1].to_i } # Extract the column from the coordinate
+    
     if rows.uniq.size == 1
       # All coordinates are in the same row, check if columns are consecutive
       cols.each_cons(2).all? { |a, b| b == a + 1 }
