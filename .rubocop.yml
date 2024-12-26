@@ -13,6 +13,8 @@ RSpec/NestedGroups:
   Enabled: false
 RSpec/ContextWording:
   Enabled: false
+Style/OptionalBooleanParameter:
+  Enabled: false
 RSpec/DescribedClass:
   SafeAutoCorrect: true
 Naming/FileName:

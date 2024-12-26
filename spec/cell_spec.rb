@@ -81,7 +81,7 @@ RSpec.describe Cell do
 
         context 'and debug is true' do
           it 'is expected to eq "S"' do
-            expect(cell.render(debug: true)).to eq('S')
+            expect(cell.render(true)).to eq('S')
           end
         end
       end
