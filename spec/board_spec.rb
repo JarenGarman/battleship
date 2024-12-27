@@ -80,8 +80,20 @@ RSpec.describe Board do
       it { is_expected.to be true }
     end
 
+    context 'when placement is valid cruiser with coords out of order' do
+      subject(:placement) { board.valid_placement?(cruiser, %w[A2 A3 A1]) }
+
+      it { is_expected.to be true }
+    end
+
     context 'when placement is valid submarine' do
       subject(:placement) { board.valid_placement?(submarine, %w[B1 C1]) }
+
+      it { is_expected.to be true }
+    end
+
+    context 'when placement is valid submarine with coords out of order' do
+      subject(:placement) { board.valid_placement?(submarine, %w[C1 B1]) }
 
       it { is_expected.to be true }
     end
