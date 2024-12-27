@@ -51,4 +51,15 @@ class Board
       @cells[coordinate].place_ship(ship)
     end
   end
+
+  def render(debug = false)
+    render_rows_array = []
+    @cells.values.group_by { |cell| cell.coordinate[0] }.each do |row, coord_array|
+      render_coords_array = coord_array.map do |coord|
+        coord.render(debug)
+      end
+      render_rows_array << "#{row} #{render_coords_array.join(' ')} \n"
+    end
+    "  1 2 3 4 \n#{render_rows_array.join}"
+  end
 end
