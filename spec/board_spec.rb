@@ -104,4 +104,34 @@ RSpec.describe Board do
       end
     end
   end
+
+  describe '#render' do
+    subject(:render) { board.render }
+
+    context 'when no ships have been placed' do
+      it 'renders an empty board' do
+        expect(render).to eq("  1 2 3 4 \nA . . . . \nB . . . . \nC . . . . \nD . . . . \n")
+      end
+    end
+
+    context 'when a ship has been placed' do
+      before do
+        board.place(cruiser, %w[A1 A2 A3])
+      end
+
+      context 'when debug is false' do
+        it 'renders an empty board' do
+          expect(render).to eq("  1 2 3 4 \nA . . . . \nB . . . . \nC . . . . \nD . . . . \n")
+        end
+      end
+
+      context 'when debug is true' do
+        subject(:render) { board.render(true) }
+
+        it 'renders the board with the ship' do
+          expect(render).to eq("  1 2 3 4 \nA S S S . \nB . . . . \nC . . . . \nD . . . . \n")
+        end
+      end
+    end
+  end
 end
