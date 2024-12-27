@@ -155,6 +155,16 @@ RSpec.describe Board do
             expect(render).to eq("  1 2 3 4 \nA X X X . \nB . . . . \nC . . . . \nD . . . . \n")
           end
         end
+
+        context 'when a shot misses' do
+          before do
+            board.cells['A4'].fire_upon
+          end
+
+          it 'can render a missed shot' do
+            expect(render).to eq("  1 2 3 4 \nA S S S M \nB . . . . \nC . . . . \nD . . . . \n")
+          end
+        end
       end
     end
   end
