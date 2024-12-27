@@ -40,29 +40,54 @@ RSpec.describe Board do
   end
 
   describe '#valid_placement?' do # checks if a ship can be placed at the given coordinates
-    it 'returns false for non-consecutive coordinates' do
-      expect(board.valid_placement?(submarine, %w[A1 A3])).to be false
-      # %w is a shortcut for creating an array of strings - range is better for consecutive numbers
-      expect(board.valid_placement?(submarine, %w[A1 B2])).to be false # diagonal coordinates are not allowed
+    context 'when number of coordinates does not match ship length' do
+      subject(:placement) { board.valid_placement?(submarine, %w[A1 A2 A3]) }
+
+      it { is_expected.to be false }
     end
 
-    it 'returns false for overlapping ships' do # ships cannot overlap
-      board.place(cruiser, %w[A1 A2 A3]) # cruise is placed at A1, A2, A3
-      expect(board.valid_placement?(submarine, %w[A1 B1])).to be false # so submarine cannot be placed at A1, B1
+    context 'when the coordinates are not consecutive' do
+      subject(:placement) { board.valid_placement?(submarine, %w[A1 A3]) }
+
+      it { is_expected.to be false }
     end
 
-    it 'returns true for valid placements' do # ships can be placed at valid coordinates
-      expect(board.valid_placement?(cruiser, %w[A1 A2 A3])).to be true
-      expect(board.valid_placement?(submarine, %w[B1 C1])).to be true
+    context 'when the coordinates are diagonal' do
+      subject(:placement) { board.valid_placement?(submarine, %w[A1 B2]) }
+
+      it { is_expected.to be false }
+    end
+
+    context 'when the coordinates already contain a ship' do # ships cannot overlap
+      subject(:placement) { board.valid_placement?(submarine, %w[A1 B1]) }
+
+      before do
+        board.place(cruiser, %w[A1 A2 A3]) # cruise is placed at A1, A2, A3
+      end
+
+      it { is_expected.to be false } # so submarine cannot be placed at A1, B1
+    end
+
+    context 'when placement is valid cruiser' do # ships can be placed at valid coordinates
+      subject(:placement) { board.valid_placement?(cruiser, %w[A1 A2 A3]) }
+
+      it { is_expected.to be true }
+    end
+
+    context 'when placement is valid submarine' do
+      subject(:placement) { board.valid_placement?(submarine, %w[B1 C1]) }
+
+      it { is_expected.to be true }
     end
   end
 
   describe '#place' do
     it 'places a ship at the given coordinates' do # places a ship at the given coordinates
       board.place(cruiser, %w[A1 A2 A3]) # calling place method to place cruiser at A1, A2, A3
-      expect(board.cells['A1'].ship).to eq(cruiser) # expecting the ship at A1 to be cruiser
-      expect(board.cells['A2'].ship).to eq(cruiser)
-      expect(board.cells['A3'].ship).to eq(cruiser)
+
+      ship_at_coords = [board.cells['A1'].ship, board.cells['A2'].ship, board.cells['A3'].ship]
+
+      expect(ship_at_coords.all?(cruiser)).to be true # expecting the ship at each coordinate to be cruiser
     end
   end
 end
