@@ -1,5 +1,7 @@
 require 'simplecov'
-SimpleCov.start
+SimpleCov.start do
+  enable_coverage :branch
+end
 require 'pry'
 require 'rspec'
 require_relative '../lib/ship'
