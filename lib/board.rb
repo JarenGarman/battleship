@@ -51,9 +51,7 @@ class Board
     (rows.uniq.size == 1 && all_consecutive(cols)) || (cols.uniq.size == 1 && all_consecutive(rows))
   end
 
-  def all_consecutive(array)
-    array.each_cons(2).all? do |a, b|
-      b.ord == a.ord + 1
-    end
+  def all_consecutive(coords)
+    coords.each_cons(2).all? { |current_coord, next_coord| next_coord.ord == current_coord.ord + 1 }
   end
 end
