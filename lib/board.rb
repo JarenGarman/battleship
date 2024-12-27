@@ -62,4 +62,12 @@ class Board
     end
     "  1 2 3 4 \n#{render_rows_array.join}"
   end
+
+  private
+
+  def all_consecutive(array)
+    array.each_cons(2).all? do |a, b|
+      b.ord == a.ord + 1
+    end
+  end
 end
