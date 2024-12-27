@@ -21,7 +21,7 @@ class Board
     coordinates.all? { |coordinate| valid_coordinate?(coordinate) } &&
       coordinates.size == ship.length &&
       coordinates.all? { |coordinate| @cells[coordinate].empty? } &&
-      are_consecutive(coordinates)
+      are_consecutive?(coordinates)
   end
 
   def place(ship, coordinates)
@@ -45,13 +45,13 @@ class Board
 
   private
 
-  def are_consecutive(coordinates)
+  def are_consecutive?(coordinates)
     rows = coordinates.map { |coordinate| coordinate[0] }.sort
     cols = coordinates.map { |coordinate| coordinate[1] }.sort
-    (rows.uniq.size == 1 && all_consecutive(cols)) || (cols.uniq.size == 1 && all_consecutive(rows))
+    (rows.uniq.size == 1 && all_consecutive?(cols)) || (cols.uniq.size == 1 && all_consecutive?(rows))
   end
 
-  def all_consecutive(coords)
+  def all_consecutive?(coords)
     coords.each_cons(2).all? { |current_coord, next_coord| next_coord.ord == current_coord.ord + 1 }
   end
 end
