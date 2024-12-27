@@ -18,26 +18,19 @@ class Board
   end
 
   def valid_placement?(ship, coordinates)
-    return false unless coordinates.all? { |coordinate| valid_coordinate?(coordinate) }
-    return false unless coordinates.size == ship.length
-    return false if coordinates.any? { |coordinate| !@cells[coordinate].empty? }
-
-    rows = coordinates.map { |coordinate| coordinate[0] } # makes an array of the rows from the coordinates
-    cols = coordinates.map { |coordinate| coordinate[1].to_i } # makes an array of the columns from the coordinates
-
-    # rows - array. uniq - no duplicates. size - returns the number of elements in the array.
-    # == 1 - if there is only one element in the array
-    if rows.uniq.size == 1
-
-      # iterates through the columns - checks if next column is next number
-      cols.each_cons(2).all? do |a, b|
-        b == a + 1
-      end
-    elsif cols.uniq.size == 1
-
-      # iterates through rows - checks if next row is next letter in alphabet
-      rows.each_cons(2).all? do |a, b|
-        b.ord == a.ord + 1
+    rows = coordinates.map { |coordinate| coordinate[0] }.sort
+    cols = coordinates.map { |coordinate| coordinate[1] }.sort
+    if coordinates.all? do |coordinate|
+      valid_coordinate?(coordinate)
+    end && coordinates.size == ship.length && coordinates.none? do |coordinate|
+                                                !@cells[coordinate].empty?
+                                              end
+      if rows.uniq.size == 1
+        all_consecutive(cols)
+      elsif cols.uniq.size == 1
+        all_consecutive(rows)
+      else
+        false
       end
     else
       false
