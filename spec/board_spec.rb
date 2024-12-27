@@ -40,6 +40,12 @@ RSpec.describe Board do
   end
 
   describe '#valid_placement?' do # checks if a ship can be placed at the given coordinates
+    context 'when given an invalid coordinate' do
+      subject(:placement) { board.valid_placement?(submarine, %w[A4 A5]) }
+
+      it { is_expected.to be false }
+    end
+
     context 'when number of coordinates does not match ship length' do
       subject(:placement) { board.valid_placement?(submarine, %w[A1 A2 A3]) }
 
@@ -82,12 +88,20 @@ RSpec.describe Board do
   end
 
   describe '#place' do
-    it 'places a ship at the given coordinates' do # places a ship at the given coordinates
-      board.place(cruiser, %w[A1 A2 A3]) # calling place method to place cruiser at A1, A2, A3
+    context 'when given invalid placement coordinates' do
+      subject(:place_ship) { board.place(cruiser, %w[A1 A2 A4]) }
 
-      ship_at_coords = [board.cells['A1'].ship, board.cells['A2'].ship, board.cells['A3'].ship]
+      it { is_expected.to be_nil }
+    end
 
-      expect(ship_at_coords.all?(cruiser)).to be true # expecting the ship at each coordinate to be cruiser
+    context 'when given valid placement coordinates' do
+      it 'places a ship at the given coordinates' do # places a ship at the given coordinates
+        board.place(cruiser, %w[A1 A2 A3]) # calling place method to place cruiser at A1, A2, A3
+
+        ship_at_coords = [board.cells['A1'].ship, board.cells['A2'].ship, board.cells['A3'].ship]
+
+        expect(ship_at_coords.all?(cruiser)).to be true # expecting the ship at each coordinate to be cruiser
+      end
     end
   end
 end
