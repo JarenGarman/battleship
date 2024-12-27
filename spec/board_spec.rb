@@ -143,6 +143,18 @@ RSpec.describe Board do
             expect(render).to eq("  1 2 3 4 \nA H S S . \nB . . . . \nC . . . . \nD . . . . \n")
           end
         end
+
+        context 'when the ship has been sunk' do
+          before do
+            board.cells['A1'].fire_upon
+            board.cells['A2'].fire_upon
+            board.cells['A3'].fire_upon
+          end
+
+          it 'can render a sunken ship' do
+            expect(render).to eq("  1 2 3 4 \nA X X X . \nB . . . . \nC . . . . \nD . . . . \n")
+          end
+        end
       end
     end
   end
