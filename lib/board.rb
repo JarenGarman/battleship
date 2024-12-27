@@ -17,13 +17,11 @@ class Board
     @cells.key?(coordinate)
   end
 
-  def valid_placement?(ship, coordinates) # rubocop:disable Metrics/AbcSize,Metrics/CyclomaticComplexity,Metrics/PerceivedComplexity
-    rows = coordinates.map { |coordinate| coordinate[0] }.sort
-    cols = coordinates.map { |coordinate| coordinate[1] }.sort
+  def valid_placement?(ship, coordinates)
     coordinates.all? { |coordinate| valid_coordinate?(coordinate) } &&
       coordinates.size == ship.length &&
       coordinates.all? { |coordinate| @cells[coordinate].empty? } &&
-      ((rows.uniq.size == 1 && all_consecutive(cols)) || (cols.uniq.size == 1 && all_consecutive(rows)))
+      are_consecutive(coordinates)
   end
 
   def place(ship, coordinates)
@@ -46,6 +44,12 @@ class Board
   end
 
   private
+
+  def are_consecutive(coordinates)
+    rows = coordinates.map { |coordinate| coordinate[0] }.sort
+    cols = coordinates.map { |coordinate| coordinate[1] }.sort
+    (rows.uniq.size == 1 && all_consecutive(cols)) || (cols.uniq.size == 1 && all_consecutive(rows))
+  end
 
   def all_consecutive(array)
     array.each_cons(2).all? do |a, b|
