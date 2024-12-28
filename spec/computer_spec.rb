@@ -9,5 +9,9 @@ RSpec.describe Computer do
     it 'has a board' do
       expect(computer.board).to be_instance_of Board
     end
+
+    it 'places submarine and cruiser' do
+      expect(computer.board.render(true).count('S')).to eq(5)
+    end
   end
 end
