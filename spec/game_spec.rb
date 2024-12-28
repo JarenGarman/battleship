@@ -11,14 +11,18 @@ RSpec.describe Game do
   end
 
   describe '#display_main_menu' do
-    xit 'displays the main menu' do
-      expect { game.display_main_menu }.to output(/Welcome to BATTLESHIP/).to_stdout
+    before do
+      allow(game).to receive(:gets).and_return('q')
+    end
+
+    it 'displays the main menu' do
+      expect { game.display_main_menu }.to output("Welcome to BATTLESHIP\nEnter 'p' to play. Enter 'q' to quit.\n").to_stdout
     end
   end
 
   describe '#handle_main_menu_input' do
     before do
-      allow_any_instance_of(Game).to receive(:gets).and_return(input)
+      allow(game).to receive(:gets).and.return(input)
     end
 
     context "when input is 'p'" do
@@ -41,7 +45,7 @@ RSpec.describe Game do
     context "when input is invalid" do
       let(:input) { 'invalid' }
 
-      xit 'displays an invalid input message and redisplays the main menu' do
+      it 'displays an invalid input message and redisplays the main menu' do
         expect(game).to receive(:display_main_menu).twice
         expect { game.send(:handle_main_menu_input) }.to output(/Invalid input/).to_stdout
       end
@@ -49,42 +53,30 @@ RSpec.describe Game do
   end
 
   describe '#start_game' do
-    before do
-      allow(game).to receive(:setup_game)
-      allow(game).to receive(:play_game)
-      allow(game).to receive(:end_game)
-    end
-
-    xit 'calls setup_game, play_game, and end_game' do
+    it 'calls setup_game, play_game, and end_game' do
       expect(game).to receive(:setup_game)
       expect(game).to receive(:play_game)
       expect(game).to receive(:end_game)
-      game.send(:start_game)
+      game.start_game
     end
   end
 
   describe '#setup_game' do
-    xit 'sets up ships for player and computer' do
+    it 'sets up ships for player and computer' do
       player = instance_double(Player)
-      computer = instance_double(ComputerPlayer)
-      game.instance_variable_set(:@player, player)
-      game.instance_variable_set(:@computer, computer)
+      computer = instance_double(Player)
+      allow(Player).to receive(:new).and.return(player, computer)
       expect(player).to receive(:setup_ships)
       expect(computer).to receive(:setup_ships)
-      game.send(:setup_game)
+      game.setup_game
     end
   end
 
   describe '#play_game' do
-    before do
-      allow(game).to receive(:player_turn)
-      allow(game).to receive(:computer_turn)
-      allow(game).to receive(:check_game_over).and_return(false, true)
-    end
-
-    xit 'alternates turns between player and computer until game is over' do
-      expect(game).to receive(:player_turn).once
-      expect(game).to receive(:computer_turn).once
+    it 'alternates turns between player and computer until game is over' do
+      allow(game).to receive(:game_over).and.return(false, false, true)
+      expect(game).to receive(:player_turn).ordered
+      expect(game).to receive(:computer_turn).ordered
       game.send(:play_game)
     end
   end
@@ -94,23 +86,23 @@ RSpec.describe Game do
     let(:computer_board) { instance_double(Board) }
 
     before do
-      allow(game.instance_variable_get(:@player)).to receive(:board).and_return(player_board)
-      allow(game.instance_variable_get(:@computer)).to receive(:board).and_return(computer_board)
+      game.instance_variable_set(:@player_board, player_board)
+      game.instance_variable_set(:@computer_board, computer_board)
     end
 
     context 'when player board has all ships sunk' do
-      xit 'sets game_over to true and displays loss message' do
-        allow(player_board).to receive(:all_ships_sunk?).and_return(true)
-        allow(computer_board).to receive(:all_ships_sunk?).and_return(false)
-        expect { game.send(:check_game_over) }.to change { game.instance_variable_get(:@game_over) }.from(false).to(true)
+      it 'sets game_over to true and displays loss message' do
+        allow(player_board).to receive(:all_ships_sunk?).and.return(true)
+        expect { game.send(:check_game_over) }.to output(/You lost!/).to_stdout
+        expect(game.instance_variable_get(:@game_over)).to eq(true)
       end
     end
 
     context 'when computer board has all ships sunk' do
-      xit 'sets game_over to true and displays win message' do
-        allow(player_board).to receive(:all_ships_sunk?).and.return(false)
+      it 'sets game_over to true and displays win message' do
         allow(computer_board).to receive(:all_ships_sunk?).and.return(true)
-        expect { game.send(:check_game_over) }.to change { game.instance_variable_get(:@game_over) }.from(false).to(true)
+        expect { game.send(:check_game_over) }.to output(/You won!/).to_stdout
+        expect(game.instance_variable_get(:@game_over)).to eq(true)
       end
     end
   end
