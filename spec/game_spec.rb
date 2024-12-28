@@ -56,7 +56,7 @@ RSpec.describe Game do
 
   describe '#start_game' do
     it 'calls setup_game, play_game, and end_game' do #tests that the start_game method calls setup_game, play_game, and end_game
-      expect(game).to receive(:setup_game) 
+      expect(game).to receive(:setup_game)
       expect(game).to receive(:play_game)
       expect(game).to receive(:end_game)
       game.start_game
