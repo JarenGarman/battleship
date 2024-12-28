@@ -2,6 +2,9 @@ require 'spec_helper'
 
 RSpec.describe Game do
   let(:game) { described_class.new }
+  #let will create a local variable named game that is initialized with a new instance of the Game class. 
+  #(:game) is the name of the variable that will be created.
+  #{described_class.new} is the value that the variable will be initialized with.
 
   describe '#initialize' do
     it 'initializes with game_over set to false' do #tests that the Game class initializes with game_over set to false
@@ -19,7 +22,7 @@ RSpec.describe Game do
     end
   end
 
-  describe '#handle_main_menu_input' do #tests that the handle_main_menu_input method starts the game when input is 'p', quits the game when input is 'q', and redisplays the main menu when input is invalid
+  describe '#handle_main_menu_input' do #tests that the handle_main_menu_input method correctly handles input
     before do
       allow(game).to receive(:gets).and.return(input)
     end
