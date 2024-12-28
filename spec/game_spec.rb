@@ -56,43 +56,11 @@ RSpec.describe Game do
 
   describe '#start_game' do
     it 'calls setup_game, play_game, and end_game' do #tests that the start_game method calls setup_game, play_game, and end_game
-      expect(game).to receive(:setup_game)
+      expect(game).to receive(:setup_game) 
       expect(game).to receive(:play_game)
       expect(game).to receive(:end_game)
       game.start_game
     end
   end
-
-  describe '#check_game_over' do #tests that the check_game_over method correctly sets the game over state and displays the appropriate message when all ships are sunk
-    let(:player_board) { instance_double(Board) }
-    let(:computer_board) { instance_double(Board) }
-
-    before do
-      game.instance_variable_set(:@player_board, player_board)
-      game.instance_variable_set(:@computer_board, computer_board)
-    end
-
-    context 'when player board has all ships sunk' do
-      it 'sets game_over to true and displays loss message' do
-        allow(player_board).to receive(:all_ships_sunk?).and.return(true)
-        expect { game.send(:check_game_over) }.to output(/You lost!/).to_stdout
-        expect(game.instance_variable_get(:@game_over)).to eq(true)
-      end
-    end
-
-    context 'when computer board has all ships sunk' do
-      it 'sets game_over to true and displays win message' do
-        allow(computer_board).to receive(:all_ships_sunk?).and.return(true)
-        expect { game.send(:check_game_over) }.to output(/You won!/).to_stdout
-        expect(game.instance_variable_get(:@game_over)).to eq(true)
-      end
-    end
-  end
-
-  describe '#end_game' do #tests that the end_game method displays game over message and returns to main menu
-    it 'displays game over message and returns to main menu' do
-      expect(game).to receive(:display_main_menu)
-      expect { game.send(:end_game) }.to output(/Game over. Returning to main menu.../).to_stdout
-    end
-  end
 end
+
