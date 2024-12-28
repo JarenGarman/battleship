@@ -1,3 +1,5 @@
+require_relative 'computer'
+
 # Play the game!
 class Game
   attr_reader :game_over
@@ -32,7 +34,10 @@ class Game
   # called when the user chooses to start the game. contains the game logic/calls the end_game method when over.
   def start_game
     puts 'Starting game...'
-    # Add logic to start the game
+    Computer.new
+    puts 'I have laid out my ships on the grid.'
+    puts 'You now need to lay out your two ships.'
+    puts 'The Cruiser is three units long and the Submarine is two units long.'
     end_game
   end
 
