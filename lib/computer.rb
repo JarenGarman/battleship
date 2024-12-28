@@ -21,41 +21,32 @@ class Computer
   end
 
   def rand_coordinates(ship)
-    @prng = Random.new
     coords = []
     until @board.valid_placement?(ship, coords)
-      coords = if @prng.rand(2).zero?
-                 horizontal_coords(ship)
-               else
-                 vertical_coords(ship)
-               end
+      horizontal_bool = Random.new.rand(2).zero?
+      start_coord = generate_start_coord(ship.length, horizontal_bool)
+      coords = generate_remaining_coords(ship.length, horizontal_bool, start_coord)
     end
     coords
   end
 
-  def horizontal_coords(ship)
-    case ship.length
-    when 3
-      filtered_board = @board.cells.reject { |coord, cell| coord[1].to_i > 2 || !cell.empty? }
-      start_coord = filtered_board.keys.sample
-      [start_coord, "#{start_coord[0]}#{start_coord[1].to_i + 1}", "#{start_coord[0]}#{start_coord[1].to_i + 2}"]
-    when 2
-      filtered_board = @board.cells.reject { |coord, cell| coord[1].to_i > 3 || !cell.empty? }
-      start_coord = filtered_board.keys.sample
-      [start_coord, "#{start_coord[0]}#{start_coord[1].to_i + 1}"]
+  def generate_start_coord(length, horizontal)
+    if horizontal
+      @board.cells.values.reject { |cell| cell.coordinate[1].to_i > 5 - length || !cell.empty? }.sample.coordinate
+    else
+      @board.cells.values.reject { |cell| cell.coordinate[0].ord > 69 - length || !cell.empty? }.sample.coordinate
     end
   end
 
-  def vertical_coords(ship)
-    case ship.length
-    when 3
-      filtered_board = @board.cells.reject { |coord, cell| coord[0].ord > 66 || !cell.empty? }
-      start_coord = filtered_board.keys.sample
-      [start_coord, "#{(start_coord[0].ord + 1).chr}#{start_coord[1]}", "#{(start_coord[0].ord + 2).chr}#{start_coord[1]}"]
-    when 2
-      filtered_board = @board.cells.reject { |coord, cell| coord[0].ord > 67 || !cell.empty? }
-      start_coord = filtered_board.keys.sample
-      [start_coord, "#{(start_coord[0].ord + 1).chr}#{start_coord[1]}"]
+  def generate_remaining_coords(length, horizontal, start_coord)
+    coords = []
+    length.times do |i|
+      coords << if horizontal
+                  "#{start_coord[0]}#{start_coord[1].to_i + i}"
+                else
+                  "#{(start_coord[0].ord + i).chr}#{start_coord[1]}"
+                end
     end
+    coords
   end
 end
