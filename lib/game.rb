@@ -6,8 +6,8 @@ class Game
     @game_over = false
   end
 
-  # The display_main_menu method is the entry point for the game. It displays the main menu and handles user input.
-  def display_main_menu
+  # The start method is the entry point for the game. It displays the main menu and handles user input.
+  def start
     puts 'Welcome to BATTLESHIP'
     puts "Enter 'p' to play. Enter 'q' to quit."
     handle_main_menu_input
@@ -38,6 +38,6 @@ class Game
 
   def end_game
     puts 'Game over. Returning to main menu...'
-    display_main_menu
+    start
   end
 end
