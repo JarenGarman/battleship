@@ -14,6 +14,6 @@ require_relative '../lib/game'
 RSpec.configure(&:disable_monkey_patching!)
 
 
-#we'll need two more classes to test the Game class completely
-#we'll need a Player class and a ComputerPlayer class
-#the Player class will be responsible for handling the player's moves and the ComputerPlayer class will be responsible for handling the computer's moves
+#need two more classes to test the Game class completely
+#Player class and a ComputerPlayer class
+#Player class for handling the player's moves + ComputerPlayer classfor handling the computer's moves
