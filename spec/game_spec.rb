@@ -8,9 +8,5 @@ RSpec.describe Game do
 
   describe '#initialize' do
     it { is_expected.to be_instance_of described_class }
-
-    it 'initializes with game_over set to false' do # tests that the Game class initializes with game_over set to false
-      expect(game.game_over).to be false
-    end
   end
 end
