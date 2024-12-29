@@ -2,8 +2,8 @@ require_relative 'computer'
 
 # Play the game!
 class Game
-  # The initialize method is the entry point for the game. It displays the main menu.
-  def initialize
+  # The start method is the entry point for the game. It displays the main menu.
+  def start
     puts 'Welcome to BATTLESHIP'
     puts "Enter 'p' to play. Enter 'q' to quit."
     handle_main_menu_input
@@ -37,6 +37,6 @@ class Game
 
   def end_game
     puts 'Game over. Returning to main menu...'
-    initialize
+    start
   end
 end
