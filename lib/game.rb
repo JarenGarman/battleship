@@ -2,14 +2,8 @@ require_relative 'computer'
 
 # Play the game!
 class Game
-  attr_reader :game_over
-
+  # The initialize method is the entry point for the game. It displays the main menu.
   def initialize
-    @game_over = false
-  end
-
-  # The start method is the entry point for the game. It displays the main menu and handles user input.
-  def start
     puts 'Welcome to BATTLESHIP'
     puts "Enter 'p' to play. Enter 'q' to quit."
     handle_main_menu_input
@@ -34,7 +28,7 @@ class Game
   # called when the user chooses to start the game. contains the game logic/calls the end_game method when over.
   def start_game
     puts 'Starting game...'
-    Computer.new
+    cpu = Computer.new
     puts 'I have laid out my ships on the grid.'
     puts 'You now need to lay out your two ships.'
     puts 'The Cruiser is three units long and the Submarine is two units long.'
@@ -43,6 +37,6 @@ class Game
 
   def end_game
     puts 'Game over. Returning to main menu...'
-    start
+    initialize
   end
 end
