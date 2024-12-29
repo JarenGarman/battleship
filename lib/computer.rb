@@ -22,10 +22,13 @@ class Computer
 
   def rand_coordinates(ship)
     coords = []
+    i = 0
     until @board.valid_placement?(ship, coords)
       horizontal_bool = Random.new.rand(2).zero?
       start_coord = generate_start_coord(ship.length, horizontal_bool)
       coords = generate_remaining_coords(ship.length, horizontal_bool, start_coord)
+      i += 1
+      return if i == 100
     end
     coords
   end
