@@ -31,11 +31,13 @@ class Computer
   end
 
   def generate_start_coord(length, horizontal)
-    if horizontal
-      @board.cells.values.reject { |cell| cell.coordinate[1].to_i > 5 - length || !cell.empty? }.sample.coordinate
-    else
-      @board.cells.values.reject { |cell| cell.coordinate[0].ord > 69 - length || !cell.empty? }.sample.coordinate
-    end
+    @board.cells.values.select do |cell|
+      if horizontal
+        cell.coordinate[1].to_i < 6 - length
+      else
+        cell.coordinate[0].ord < 70 - length
+      end && cell.empty?
+    end.sample.coordinate
   end
 
   def generate_remaining_coords(length, horizontal, start_coord)
