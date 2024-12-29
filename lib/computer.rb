@@ -7,18 +7,15 @@ class Computer
 
   def initialize
     @board = Board.new
-    @cruiser = Ship.new('Cruiser', 3)
-    @submarine = Ship.new('Submarine', 2)
-    place([@cruiser, @submarine])
   end
 
-  private
-
-  def place(ships)
+  def place_ships(ships)
     ships.each do |ship|
       @board.place(ship, rand_coordinates(ship))
     end
   end
+
+  private
 
   def rand_coordinates(ship)
     coords = []

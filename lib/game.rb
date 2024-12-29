@@ -28,7 +28,11 @@ class Game
   # called when the user chooses to start the game. contains the game logic/calls the end_game method when over.
   def start_game
     puts 'Starting game...'
+    cruiser = Ship.new('Cruiser', 3)
+    submarine = Ship.new('Submarine', 2)
+    @ships = [cruiser, submarine]
     cpu = Computer.new
+    cpu.place_ships(@ships)
     puts 'I have laid out my ships on the grid.'
     puts 'You now need to lay out your two ships.'
     puts 'The Cruiser is three units long and the Submarine is two units long.'
