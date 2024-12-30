@@ -30,15 +30,11 @@ class Board
   end
 
   def render(debug = false)
-    columns = [' ', @columns, "\n"].flatten.join(' ')
-    render_rows_array = []
-    @cells.values.group_by { |cell| cell.coordinate[0] }.each do |row, coord_array|
-      render_coords_array = coord_array.map do |coord|
-        coord.render(debug)
-      end
-      render_rows_array << "#{row} #{render_coords_array.join(' ')} \n"
+    top_line = [' ', @columns, "\n"].flatten.join(' ')
+    render_rows_array = @rows.map do |row|
+      "#{row} #{@cells.select { |coord| coord[0] == row }.values.map { |cell| cell.render(debug) }.join(' ')} \n"
     end
-    columns + render_rows_array.join
+    top_line + render_rows_array.join
   end
 
   private
