@@ -65,5 +65,12 @@ RSpec.describe Game do
       game.send(:setup_game)
     end
   end
+
+  describe '#end_game' do
+    it 'displays game over message and returns to main menu' do
+      expect(game).to receive(:start)
+      expect { game.send(:end_game) }.to output(/Game over. Returning to main menu.../).to_stdout
+    end
+  end
 end
 
