@@ -17,10 +17,11 @@ class User
         coordinates = gets.chomp.split
       end
       @board.place(ship, coordinates)
+      render_board
     end
   end
 
   def render_board
-    puts @board.render
+    puts @board.render(true)
   end
 end
