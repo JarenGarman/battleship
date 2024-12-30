@@ -40,9 +40,9 @@ class Game
     puts 'The Cruiser is three units long and the Submarine is two units long.'
 
     user = User.new
-    user.place_ships(ships)
+    user.place_ships(@ships)
     user.render_board
-    
+
     end_game
   end
 

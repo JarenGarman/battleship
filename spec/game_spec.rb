@@ -9,4 +9,23 @@ RSpec.describe Game do
   describe '#initialize' do
     it { is_expected.to be_instance_of described_class }
   end
+
+  describe '#start' do
+    it 'starts the game' do
+      expect(game).to respond_to(:start)
+    end
+  end
+
+  describe '#play_turn' do
+    it 'plays a turn' do
+      expect(game).to respond_to(:play_turn)
+    end
+  end
+
+  describe '#game_over?' do
+    it 'checks if the game is over' do
+      expect(game).to respond_to(:game_over?)
+    end
+  end
 end
+
