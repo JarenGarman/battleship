@@ -1,7 +1,4 @@
 require 'spec_helper'
-require_relative '../lib/user'
-require_relative '../lib/board'
-require_relative '../lib/ship'
 
 RSpec.describe User do
   let(:user) { described_class.new }
