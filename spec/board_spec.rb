@@ -22,6 +22,14 @@ RSpec.describe Board do
         expect(cells.values.all?(Cell)).to be true
       end
     end
+
+    it 'has 4 rows' do
+      expect(board.rows.length).to eq(4)
+    end
+
+    it 'has 4 columns' do
+      expect(board.columns.length).to eq(4)
+    end
   end
 
   describe '#valid_coordinate?' do # checks if a given coordinate is valid
