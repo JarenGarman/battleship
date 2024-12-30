@@ -19,13 +19,11 @@ class Computer
 
   def rand_coordinates(ship)
     coords = []
-    i = 0
+    h_or_v = [0, 1]
     until @board.valid_placement?(ship, coords)
-      horizontal, vertical = [0, 1].shuffle # rubocop:disable Performance/CollectionLiteralInLoop
+      horizontal, vertical = h_or_v.shuffle
       start_coord = generate_start_coord(ship.length, horizontal, vertical)
       coords = generate_remaining_coords(ship.length, horizontal, vertical, start_coord)
-      i += 1
-      return if i == 100
     end
     coords
   end
