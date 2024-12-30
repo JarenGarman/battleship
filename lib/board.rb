@@ -8,6 +8,7 @@ class Board
     @rows = (65..(64 + dimensions[:length])).to_a.map(&:chr)
     @columns = (1..dimensions[:width]).to_a
     @cells = generate_board
+    @cells_by_row = @cells.values.group_by { |cell| cell.coordinate[0] }
   end
 
   def valid_coordinate?(coordinate)
@@ -30,11 +31,8 @@ class Board
   end
 
   def render(debug = false)
-    top_line = [' ', @columns, "\n"].flatten.join(' ')
-    render_rows_array = @rows.map do |row|
-      "#{row} #{@cells.select { |coord| coord[0] == row }.values.map { |cell| cell.render(debug) }.join(' ')} \n"
-    end
-    top_line + render_rows_array.join
+    [' ', @columns, "\n"].flatten.join(' ') +
+      @rows.map { |row| "#{row} #{@cells_by_row[row].map { |cell| cell.render(debug) }.join(' ')} \n" }.join
   end
 
   private
