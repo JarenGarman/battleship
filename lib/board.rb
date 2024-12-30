@@ -2,15 +2,12 @@ require_relative 'cell'
 
 # Create a board that contains Cells for the game
 class Board
-  attr_reader :cells
+  attr_reader :cells, :rows, :columns
 
-  def initialize
-    @cells = {
-      'A1' => Cell.new('A1'), 'A2' => Cell.new('A2'), 'A3' => Cell.new('A3'), 'A4' => Cell.new('A4'),
-      'B1' => Cell.new('B1'), 'B2' => Cell.new('B2'), 'B3' => Cell.new('B3'), 'B4' => Cell.new('B4'),
-      'C1' => Cell.new('C1'), 'C2' => Cell.new('C2'), 'C3' => Cell.new('C3'), 'C4' => Cell.new('C4'),
-      'D1' => Cell.new('D1'), 'D2' => Cell.new('D2'), 'D3' => Cell.new('D3'), 'D4' => Cell.new('D4')
-    }
+  def initialize(dimensions = { length: 4, width: 4 })
+    @rows = (65..(64 + dimensions[:length])).to_a.map(&:chr)
+    @columns = (1..dimensions[:width]).to_a
+    @cells = generate_board
   end
 
   def valid_coordinate?(coordinate)
@@ -33,6 +30,7 @@ class Board
   end
 
   def render(debug = false)
+    columns = [' ', @columns, "\n"].flatten.join(' ')
     render_rows_array = []
     @cells.values.group_by { |cell| cell.coordinate[0] }.each do |row, coord_array|
       render_coords_array = coord_array.map do |coord|
@@ -40,10 +38,22 @@ class Board
       end
       render_rows_array << "#{row} #{render_coords_array.join(' ')} \n"
     end
-    "  1 2 3 4 \n#{render_rows_array.join}"
+    columns + render_rows_array.join
   end
 
   private
+
+  def generate_board
+    coords = []
+    @rows.each do |row|
+      @columns.each do |column|
+        coords << "#{row}#{column}"
+      end
+    end
+    cells = {}
+    coords.each { |coord| cells[coord] = Cell.new(coord) }
+    cells
+  end
 
   def are_consecutive?(coordinates)
     rows = coordinates.map { |coordinate| coordinate[0] }.sort
