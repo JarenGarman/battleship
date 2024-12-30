@@ -24,11 +24,11 @@ RSpec.describe Board do
     end
 
     it 'has 4 rows' do
-      expect(board.rows).to eq(4)
+      expect(board.rows.length).to eq(4)
     end
 
     it 'has 4 columns' do
-      expect(board.columns).to eq(4)
+      expect(board.columns.length).to eq(4)
     end
   end
 
