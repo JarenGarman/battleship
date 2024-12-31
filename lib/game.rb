@@ -1,12 +1,11 @@
-require_relative 'computer'
-require_relative 'user'
+require 'spec_helper'
 
 # Play the game!
 class Game
   def start
     puts 'Welcome to BATTLESHIP'
     puts "Enter 'p' to play. Enter 'q' to quit."
-    handle_main_menu_input
+    handle_main_menu_input #abstracted to private method below
   end
 
   private
