@@ -1,3 +1,7 @@
+require_relative 'ship'
+require_relative 'computer'
+require_relative 'user'
+
 # Play the game!
 class Game
   def start
