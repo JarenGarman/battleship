@@ -1,6 +1,5 @@
 require_relative 'cell'
 
-# Create a board that contains Cells for the game
 class Board
   attr_reader :cells, :rows, :columns
 
@@ -30,14 +29,8 @@ class Board
     end
   end
 
-  def render(debug = false)
-    [' ', @columns, "\n"].flatten.join(' ') +
-      @rows.map { |row| "#{row} #{@cells_by_row[row].map { |cell| cell.render(debug) }.join(' ')} \n" }.join
-  end
-
   def fire_upon(coordinate)
     if valid_coordinate?(coordinate)
-      puts "DEBUG: Firing upon #{coordinate} on the board."
       @cells[coordinate].fire_upon
       return @cells[coordinate].render
     end
@@ -45,19 +38,47 @@ class Board
   end
 
   def all_ships_sunk?
-    @cells.values.all? { |cell| cell.empty? || cell.ship.sunk? }
+    @cells.values.all? { |cell| cell.ship.nil? || cell.ship.sunk? }
+  end
+
+  def render(show_ships = false)
+    rendered_board = "  " + @columns.join(" ") + "\n"
+    @rows.each do |row|
+      rendered_board += row + " "
+      @columns.each do |column|
+        coordinate = "#{row}#{column}"
+        rendered_board += @cells[coordinate].render(show_ships) + " "
+      end
+      rendered_board.rstrip!
+      rendered_board += "\n"
+    end
+    rendered_board.rstrip
   end
 
   private
 
   def generate_board
-    board = {}
+    coords = []
     @rows.each do |row|
       @columns.each do |column|
-        coordinate = "#{row}#{column}"
-        board[coordinate] = Cell.new(coordinate)
+        coords << "#{row}#{column}"
       end
     end
-    board
+    coords.map { |coord| [coord, Cell.new(coord)] }.to_h
+  end
+
+  def are_consecutive?(coordinates)
+    rows = coordinates.map { |coordinate| coordinate[0] }
+    cols = coordinates.map { |coordinate| coordinate[1..-1].to_i }
+
+    if rows.uniq.size == 1
+      # All coordinates are in the same row, check if columns are consecutive
+      cols.each_cons(2).all? { |a, b| b == a + 1 }
+    elsif cols.uniq.size == 1
+      # All coordinates are in the same column, check if rows are consecutive
+      rows.each_cons(2).all? { |a, b| b.ord == a.ord + 1 }
+    else
+      false
+    end
   end
 end
