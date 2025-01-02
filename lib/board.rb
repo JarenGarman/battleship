@@ -16,10 +16,20 @@ class Board
   end
 
   def valid_placement?(ship, coordinates)
-    coordinates.all? { |coordinate| valid_coordinate?(coordinate) } &&
-      coordinates.size == ship.length &&
-      coordinates.all? { |coordinate| @cells[coordinate].empty? } &&
-      are_consecutive?(coordinates)
+    return false unless coordinates.all? { |coordinate| valid_coordinate?(coordinate) }
+    return false unless coordinates.size == ship.length
+    return false if coordinates.any? { |coordinate| !@cells[coordinate].empty? }
+
+    rows = coordinates.map { |coordinate| coordinate[0] }
+    cols = coordinates.map { |coordinate| coordinate[1..-1].to_i }
+
+    if rows.uniq.size == 1
+      cols.each_cons(2).all? { |a, b| b == a + 1 }
+    elsif cols.uniq.size == 1
+      rows.each_cons(2).all? { |a, b| b.ord == a.ord + 1 }
+    else
+      false
+    end
   end
 
   def place(ship, coordinates)
@@ -33,16 +43,9 @@ class Board
   def fire_upon(coordinate)
     if valid_coordinate?(coordinate)
       @cells[coordinate].fire_upon
-      if @cells[coordinate].empty?
-        'miss'
-      elsif @cells[coordinate].ship.sunk?
-        'sunk'
-      else
-        'hit'
-      end
-    else
-      'invalid'
+      return @cells[coordinate].render
     end
+    "invalid"
   end
 
   def all_ships_sunk?
@@ -66,28 +69,12 @@ class Board
   private
 
   def generate_board
-    board = {}
+    coords = []
     @rows.each do |row|
       @columns.each do |column|
-        coordinate = "#{row}#{column}"
-        board[coordinate] = Cell.new(coordinate)
+        coords << "#{row}#{column}"
       end
     end
-    board
-  end
-
-  def are_consecutive?(coordinates)
-    rows = coordinates.map { |coordinate| coordinate[0] }
-    cols = coordinates.map { |coordinate| coordinate[1..-1].to_i }
-
-    if rows.uniq.size == 1
-      # All coordinates are in the same row, check if columns are consecutive
-      cols.each_cons(2).all? { |a, b| b == a + 1 }
-    elsif cols.uniq.size == 1
-      # All coordinates are in the same column, check if rows are consecutive
-      rows.each_cons(2).all? { |a, b| b.ord == a.ord + 1 }
-    else
-      false
-    end
+    coords.map { |coord| [coord, Cell.new(coord)] }.to_h
   end
 end
