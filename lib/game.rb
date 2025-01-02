@@ -85,8 +85,6 @@ class Game
         puts "You lost! All your ships have been sunk."
         break
       end
-
-      render_boards(user)
     end
     display_winner
   end
