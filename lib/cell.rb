@@ -17,16 +17,21 @@ class Cell
   # place_ship method takes a ship as an argument. it's function is to place a ship in a cell
   def place_ship(ship)
     @ship = ship
-    puts "DEBUG: Placed ship #{ship.name} in cell. Ship health: #{ship.health}"  # Debugging output
+    #puts "DEBUG: Placed ship #{ship.name} in cell. Ship health: #{ship.health}"  # Debugging output
   end
 
-  # fire_upon method marks a cell as fired upon
+  # fire_upon method marks a cell as fired upon and returns the result
   def fire_upon
-    if @ship && !@fired_upon
-      @ship.hit
-      puts "DEBUG: Fired upon cell. Ship #{@ship.name} health now #{@ship.health}"  # Debugging output
-    end
+    return :already_fired if @fired_upon
+
     @fired_upon = true
+    if @ship
+      @ship.hit
+      return :sunk if @ship.sunk?
+      :hit
+    else
+      :miss
+    end
   end
 
   # fired_upon? method checks if a cell has been fired upon

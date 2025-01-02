@@ -25,6 +25,7 @@ class Game
   def handle_main_menu_input
     case gets.chomp.downcase
     when 'p'
+      puts "Starting game..."
       start_game
     when 'q'
       puts 'Quitting game...'
@@ -52,9 +53,6 @@ class Game
     @player_board = user.board  # Assign player's board here.
     puts "DEBUG: Player board ships: #{@player_board.ships.map { |s| "#{s.name}: #{s.health}" }}"  # Debugging output
 
-    render_boards(user)
-
-    # Start the game with the user
     play_game(user)
   end
 
@@ -68,13 +66,30 @@ class Game
   def play_game(user)
     loop do
       render_boards(user)
-      player_turn
-      render_boards(user)
-      break if game_over?
 
-      computer_turn
+      # Player's turn
+      puts "Your turn:"
+      player_shot_result = player_turn
+      puts player_shot_result
+
+      # Check if the player has won
+      if @computer_board.all_ships_sunk?
+        puts "You won! All enemy ships have been sunk."
+        break
+      end
+
+      # Computer's turn
+      puts "My turn:"
+      computer_shot_result = computer_turn
+      puts computer_shot_result
+
+      # Check if the computer has won
+      if @player_board.all_ships_sunk?
+        puts "You lost! All your ships have been sunk."
+        break
+      end
+
       render_boards(user)
-      break if game_over?
     end
     display_winner
   end
@@ -85,17 +100,26 @@ class Game
       puts 'Enter the coordinate for your shot:'
       coordinate = gets.chomp.upcase
       if !@computer_board.valid_coordinate?(coordinate)
-        puts 'Please enter a valid coordinate:'
+        puts 'Invalid coordinate. Please enter a valid one.'
       elsif @player_shots.include?(coordinate)
-        puts 'You have already fired on this coordinate. Please enter a new coordinate:'
+        puts 'You have already fired on this coordinate. Try another one.'
       else
         break
       end
     end
     result = @computer_board.fire_upon(coordinate)
     @player_shots << coordinate
-    puts "DEBUG: Player shot coordinates: #{@player_shots.inspect}"
-    puts "Your shot on #{coordinate} was a #{result}."
+
+    case result
+    when :miss
+      "Your shot on #{coordinate} was a miss."
+    when :hit
+      "Your shot on #{coordinate} was a hit!"
+    when :sunk
+      "You sunk my ship at #{coordinate}!"
+    else
+      "Unexpected result: #{result}"
+    end
   end
 
   def computer_turn
@@ -106,8 +130,17 @@ class Game
     end
     result = @player_board.fire_upon(coordinate)
     @computer_shots << coordinate
-    puts "DEBUG: Computer shot coordinates: #{@computer_shots.inspect}"
-    puts "My shot on #{coordinate} was a #{result}."
+
+    case result
+    when :miss
+      "My shot on #{coordinate} was a miss."
+    when :hit
+      "My shot on #{coordinate} was a hit!"
+    when :sunk
+      "I sunk your ship at #{coordinate}!"
+    else
+      "Unexpected result: #{result}"
+    end
   end
 
   def random_coordinate
@@ -128,10 +161,8 @@ class Game
 
   def display_winner
     if @player_board.all_ships_sunk?
-      puts "DEBUG: Player lost. All ships have been sunk."
       puts "You lost! All your ships have been sunk."
     elsif @computer_board.all_ships_sunk?
-      puts "DEBUG: Computer lost. All enemy ships have been sunk."
       puts "You won! All enemy ships have been sunk."
     end
   end
