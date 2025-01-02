@@ -65,12 +65,12 @@ class Game
     loop do
       render_boards(user)
       player_turn
+      render_boards(user)
       break if game_over?
 
       computer_turn
-      break if game_over?
-
       render_boards(user)
+      break if game_over?
     end
     display_winner
   end
