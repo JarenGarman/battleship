@@ -9,7 +9,6 @@ class Board
     @cells = generate_board
     @cells_by_row = @cells.values.group_by { |cell| cell.coordinate[0] }
     @ships = []
-    #puts "DEBUG: Board initialized with rows: #{@rows.inspect}, columns: #{@columns.inspect}, cells: #{@cells.keys.inspect}"
   end
 
   def valid_coordinate?(coordinate)
@@ -30,27 +29,16 @@ class Board
       @cells[coordinate].place_ship(ship)
     end
     @ships << ship unless @ships.include?(ship)
-    #puts "DEBUG: Ship #{ship.name} placed on board with health #{ship.health}"  # Debugging output
   end
 
   def fire_upon(coordinate)
     if valid_coordinate?(coordinate)
-      puts "DEBUG: Firing upon #{coordinate}."
       @cells[coordinate].fire_upon
-      #puts "DEBUG: Cell #{coordinate} status: #{@cells[coordinate].render(true)}"
-    else
-      #puts "Invalid coordinate: #{coordinate}"
     end
   end
 
   def all_ships_sunk?
-    #puts "DEBUG: Checking if all ships are sunk."
-    @ships.each do |ship|
-      puts "DEBUG: Ship #{ship.name} sunk? #{ship.sunk?}"
-    end
-    all_sunk = @ships.all?(&:sunk?)
-    #puts "DEBUG: All ships sunk? #{all_sunk}"
-    all_sunk
+    @ships.all?(&:sunk?)
   end
 
   def render(show_ships = false)

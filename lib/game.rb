@@ -25,7 +25,6 @@ class Game
   def handle_main_menu_input
     case gets.chomp.downcase
     when 'p'
-      puts "Starting game..."
       start_game
     when 'q'
       puts 'Quitting game...'
@@ -45,13 +44,11 @@ class Game
     cpu = Computer.new
     cpu.place_ships(ships)
     @computer_board = cpu.board  # Assign computer's board here.
-    puts "DEBUG: Computer board ships: #{@computer_board.ships.map { |s| "#{s.name}: #{s.health}" }}"  # Debugging output
 
     # Place ships for the user
     user = User.new
     user.place_ships(ships)
     @player_board = user.board  # Assign player's board here.
-    puts "DEBUG: Player board ships: #{@player_board.ships.map { |s| "#{s.name}: #{s.health}" }}"  # Debugging output
 
     play_game(user)
   end
@@ -152,9 +149,6 @@ class Game
   def game_over?
     player_lost = @player_board.all_ships_sunk?
     computer_lost = @computer_board.all_ships_sunk?
-
-    puts "DEBUG: Player lost? #{player_lost}"
-    puts "DEBUG: Computer lost? #{computer_lost}"
 
     player_lost || computer_lost
   end
