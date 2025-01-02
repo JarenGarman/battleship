@@ -53,19 +53,33 @@ class Board
   end
 
   def all_ships_sunk?
-    @cells.values.all? { |cell| cell.empty? || cell.ship.sunk? }
+    @cells.values.all? { |cell| cell.ship.nil? || cell.ship.sunk? }
   end
 
   private
 
   def generate_board
-    board = {}
+    coords = []
     @rows.each do |row|
       @columns.each do |column|
-        coordinate = "#{row}#{column}"
-        board[coordinate] = Cell.new(coordinate)
+        coords << "#{row}#{column}"
       end
     end
-    board
+    coords.map { |coord| [coord, Cell.new(coord)] }.to_h
+  end
+
+  def are_consecutive?(coordinates)
+    rows = coordinates.map { |coordinate| coordinate[0] }
+    cols = coordinates.map { |coordinate| coordinate[1..-1].to_i }
+
+    if rows.uniq.size == 1
+      # All coordinates are in the same row, check if columns are consecutive
+      cols.each_cons(2).all? { |a, b| b == a + 1 }
+    elsif cols.uniq.size == 1
+      # All coordinates are in the same column, check if rows are consecutive
+      rows.each_cons(2).all? { |a, b| b.ord == a.ord + 1 }
+    else
+      false
+    end
   end
 end
