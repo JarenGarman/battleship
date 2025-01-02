@@ -1,7 +1,7 @@
 require_relative 'cell'
 
 class Board
-  attr_reader :cells, :rows, :columns
+  attr_reader :cells, :rows, :columns, :ships
 
   def initialize(dimensions = { length: 4, width: 4 })
     @rows = (65..(64 + dimensions[:length])).to_a.map(&:chr)
@@ -9,6 +9,7 @@ class Board
     @cells = generate_board
     @cells_by_row = @cells.values.group_by { |cell| cell.coordinate[0] }
     @ships = []
+    puts "DEBUG: Board initialized with rows: #{@rows.inspect}, columns: #{@columns.inspect}, cells: #{@cells.keys.inspect}"
   end
 
   def valid_coordinate?(coordinate)
@@ -34,14 +35,18 @@ class Board
   def fire_upon(coordinate)
     if valid_coordinate?(coordinate)
       cell = @cells[coordinate]
+      puts "DEBUG: Firing upon #{coordinate}. Cell status before: #{cell.render(true)}"
       cell.fire_upon
+      puts "DEBUG: Cell status after: #{cell.render(true)}"
     else
       puts "Invalid coordinate: #{coordinate}"
     end
   end
 
   def all_ships_sunk?
-    @cells.values.all? { |cell| cell.ship.nil? || cell.ship.sunk? }
+    all_sunk = @ships.all?(&:sunk?)
+    puts "DEBUG: All ships sunk? #{all_sunk}"
+    all_sunk
   end
 
   def render(show_ships = false)

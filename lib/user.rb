@@ -18,6 +18,7 @@ class User
       end
       @board.place(ship, coordinates)
       puts "DEBUG: Placed #{ship.name} at #{coordinates.inspect}"  # Debugging output
+      puts "DEBUG: Current ships on board: #{@board.ships.map(&:name).inspect}"  # Debugging output
       render_board
     end
   end

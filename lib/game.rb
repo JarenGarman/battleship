@@ -49,7 +49,7 @@ class Game
 
     user = User.new
     user.place_ships(ships)
-    puts "Player's ships placed: #{user.board.render(true)}"
+    puts "Player's ships placed: #{user.board.render(true)}"  # Debugging output
     render_boards(user)
 
     play_game(user)
@@ -66,9 +66,11 @@ class Game
     loop do
       render_boards(user)
       player_turn
+      render_boards(user)
       break if game_over?
 
       computer_turn
+      render_boards(user)
       break if game_over?
     end
     display_winner
