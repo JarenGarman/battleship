@@ -1,5 +1,6 @@
 require_relative 'cell'
 
+# Create a board that contains Cells for the game
 class Board
   attr_reader :cells, :rows, :columns
 
@@ -15,20 +16,10 @@ class Board
   end
 
   def valid_placement?(ship, coordinates)
-    return false unless coordinates.all? { |coordinate| valid_coordinate?(coordinate) }
-    return false unless coordinates.size == ship.length
-    return false if coordinates.any? { |coordinate| !@cells[coordinate].empty? }
-
-    rows = coordinates.map { |coordinate| coordinate[0] }
-    cols = coordinates.map { |coordinate| coordinate[1..-1].to_i }
-
-    if rows.uniq.size == 1
-      cols.each_cons(2).all? { |a, b| b == a + 1 }
-    elsif cols.uniq.size == 1
-      rows.each_cons(2).all? { |a, b| b.ord == a.ord + 1 }
-    else
-      false
-    end
+    coordinates.all? { |coordinate| valid_coordinate?(coordinate) } &&
+      coordinates.size == ship.length &&
+      coordinates.all? { |coordinate| @cells[coordinate].empty? } &&
+      are_consecutive?(coordinates)
   end
 
   def place(ship, coordinates)
@@ -37,6 +28,11 @@ class Board
     coordinates.each do |coordinate|
       @cells[coordinate].place_ship(ship)
     end
+  end
+
+  def render(debug = false)
+    [' ', @columns, "\n"].flatten.join(' ') +
+      @rows.map { |row| "#{row} #{@cells_by_row[row].map { |cell| cell.render(debug) }.join(' ')} \n" }.join
   end
 
   def fire_upon(coordinate)
@@ -48,32 +44,19 @@ class Board
   end
 
   def all_ships_sunk?
-    @cells.values.all? { |cell| cell.ship.nil? || cell.ship.sunk? }
-  end
-
-  def render(show_ships = false)
-    rendered_board = "  " + @columns.join(" ") + "\n"
-    @rows.each do |row|
-      rendered_board += row + " "
-      @columns.each do |column|
-        coordinate = "#{row}#{column}"
-        rendered_board += @cells[coordinate].render(show_ships) + " "
-      end
-      rendered_board.rstrip!
-      rendered_board += "\n"
-    end
-    rendered_board.rstrip
+    @cells.values.all? { |cell| cell.empty? || cell.ship.sunk? }
   end
 
   private
 
   def generate_board
-    coords = []
+    board = {}
     @rows.each do |row|
       @columns.each do |column|
-        coords << "#{row}#{column}"
+        coordinate = "#{row}#{column}"
+        board[coordinate] = Cell.new(coordinate)
       end
     end
-    coords.map { |coord| [coord, Cell.new(coord)] }.to_h
+    board
   end
 end
