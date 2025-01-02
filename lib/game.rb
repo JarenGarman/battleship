@@ -89,7 +89,7 @@ class Game
       end
     end
     result = @computer_board.fire_upon(coordinate)
-    @player_shots << coordinate
+    @player_shots << coordinate  # Add to shots only after firing
     puts "Your shot on #{coordinate} was a #{result}."
   end
 
