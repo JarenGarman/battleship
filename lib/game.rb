@@ -1,7 +1,7 @@
-require_relative 'computer'
 require_relative 'user'
 require_relative 'board'
 require_relative 'ship'
+require_relative 'computer'
 
 # Play the game!
 class Game
@@ -36,10 +36,6 @@ class Game
   end
 
   def start_game
-    setup_game
-  end
-
-  def setup_game
     cruiser = Ship.new('Cruiser', 3)
     submarine = Ship.new('Submarine', 2)
     ships = [cruiser, submarine]
@@ -47,14 +43,15 @@ class Game
     # Place ships for the computer
     cpu = Computer.new
     cpu.place_ships(ships)
-    puts 'I have laid out my ships on the grid.'
-    puts 'You now need to lay out your two ships.'
-    puts 'The Cruiser is three units long and the Submarine is two units long.'
+    @computer_board = cpu.board  # Assign computer's board here.
+    puts "DEBUG: Computer board ships: #{@computer_board.ships.map(&:name)}"  # Debugging output
 
     # Place ships for the user
     user = User.new
     user.place_ships(ships)
-    puts "DEBUG: Player's ships placed: #{user.board.render(true)}"  # Debugging output
+    @player_board = user.board  # Assign player's board here.
+    puts "DEBUG: Player board ships: #{@player_board.ships.map(&:name)}"  # Debugging output
+
     render_boards(user)
 
     # Start the game with the user
@@ -120,13 +117,21 @@ class Game
   end
 
   def game_over?
-    @player_board.all_ships_sunk? || @computer_board.all_ships_sunk?
+    player_lost = @player_board.all_ships_sunk?
+    computer_lost = @computer_board.all_ships_sunk?
+
+    puts "DEBUG: Player lost? #{player_lost}"
+    puts "DEBUG: Computer lost? #{computer_lost}"
+
+    player_lost || computer_lost
   end
 
   def display_winner
     if @player_board.all_ships_sunk?
+      puts "DEBUG: Player lost. All ships have been sunk."
       puts "You lost! All your ships have been sunk."
-    else
+    elsif @computer_board.all_ships_sunk?
+      puts "DEBUG: Computer lost. All enemy ships have been sunk."
       puts "You won! All enemy ships have been sunk."
     end
   end

@@ -6,6 +6,7 @@ class Ship
     @name = name
     @length = length
     @health = length
+    puts "DEBUG: Initializing ship #{name} with length #{length} and health #{@health}"
   end
 
   def hit
@@ -13,6 +14,6 @@ class Ship
   end
 
   def sunk?
-    @health == 0
+    @health <= 0
   end
 end
