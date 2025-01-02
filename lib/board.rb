@@ -1,6 +1,5 @@
 require_relative 'cell'
 
-# Create a board that contains Cells for the game
 class Board
   attr_reader :cells, :rows, :columns
 
@@ -49,7 +48,7 @@ class Board
   end
 
   def all_ships_sunk?
-    @cells.values.any? { |cell| cell.ship && !cell.ship.sunk? }
+    @cells.values.all? { |cell| cell.ship.nil? || cell.ship.sunk? }
   end
 
   def render(show_ships = false)
