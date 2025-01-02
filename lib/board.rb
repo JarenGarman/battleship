@@ -30,20 +30,24 @@ class Board
       @cells[coordinate].place_ship(ship)
     end
     @ships << ship
+    puts "DEBUG: Ship #{ship.name} added to board. Total ships: #{@ships.size}"  # Debugging output
   end
 
   def fire_upon(coordinate)
     if valid_coordinate?(coordinate)
-      cell = @cells[coordinate]
-      puts "DEBUG: Firing upon #{coordinate}. Cell status before: #{cell.render(true)}"
-      cell.fire_upon
-      puts "DEBUG: Cell status after: #{cell.render(true)}"
+      puts "DEBUG: Firing upon #{coordinate}."
+      @cells[coordinate].fire_upon
+      puts "DEBUG: Cell #{coordinate} after firing: #{@cells[coordinate].render(true)}"
     else
       puts "Invalid coordinate: #{coordinate}"
     end
   end
 
   def all_ships_sunk?
+    puts "DEBUG: Checking if all ships are sunk."
+    @ships.each do |ship|
+      puts "DEBUG: Ship #{ship.name} - sunk? #{ship.sunk?}"
+    end
     all_sunk = @ships.all?(&:sunk?)
     puts "DEBUG: All ships sunk? #{all_sunk}"
     all_sunk
@@ -66,13 +70,14 @@ class Board
   private
 
   def generate_board
-    coords = []
+    board = {}
     @rows.each do |row|
       @columns.each do |column|
-        coords << "#{row}#{column}"
+        coordinate = "#{row}#{column}"
+        board[coordinate] = Cell.new(coordinate)
       end
     end
-    coords.map { |coord| [coord, Cell.new(coord)] }.to_h
+    board
   end
 
   def are_consecutive?(coordinates)

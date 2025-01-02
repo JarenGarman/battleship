@@ -10,6 +10,7 @@ class User
 
   def place_ships(ships)
     ships.each do |ship|
+      puts "DEBUG: Placing ship #{ship.name}."
       puts "Enter the squares for the #{ship.name} (#{ship.length} spaces):"
       coordinates = gets.chomp.split
       until @board.valid_placement?(ship, coordinates)
@@ -17,7 +18,7 @@ class User
         coordinates = gets.chomp.split
       end
       @board.place(ship, coordinates)
-      puts "DEBUG: Placed #{ship.name} at #{coordinates.inspect}"  # Debugging output
+      puts "DEBUG: Ship #{ship.name} placed at #{coordinates.inspect}."  # Debugging output
       puts "DEBUG: Current ships on board: #{@board.ships.map(&:name).inspect}"  # Debugging output
       render_board
     end
