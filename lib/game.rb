@@ -45,6 +45,11 @@ class Game
     cpu.place_ships(ships)
     @computer_board = cpu.board  # Assign computer's board here.
 
+    # Explanation for the user
+    puts "I have laid out my ships on the grid."
+    puts "You now need to lay out your two ships."
+    puts "The Cruiser is three units long and the Submarine is two units long."
+
     # Place ships for the user
     user = User.new
     user.place_ships(ships)
@@ -58,6 +63,7 @@ class Game
     puts @computer_board.render
     puts '==============PLAYER BOARD=============='
     puts user.board.render(true)
+    puts '----------------------------------------'
   end
 
   def play_game(user)
@@ -65,9 +71,10 @@ class Game
       render_boards(user)
 
       # Player's turn
-      puts "\nYour turn:"
       player_shot_result = player_turn
+      puts
       puts player_shot_result
+      puts '----------------------------------------'
 
       # Check if the player has won
       if @computer_board.all_ships_sunk?
@@ -75,10 +82,13 @@ class Game
         break
       end
 
+      # Add a blank line between player's shot result and computer's shot
+      puts
+
       # Computer's turn
-      puts "\nMy turn:"
       computer_shot_result = computer_turn
       puts computer_shot_result
+      puts '----------------------------------------'
 
       # Check if the computer has won
       if @player_board.all_ships_sunk?
