@@ -44,13 +44,13 @@ class Game
     cpu = Computer.new
     cpu.place_ships(ships)
     @computer_board = cpu.board  # Assign computer's board here.
-    puts "DEBUG: Computer board ships: #{@computer_board.ships.map(&:name)}"  # Debugging output
+    puts "DEBUG: Computer board ships: #{@computer_board.ships.map { |s| "#{s.name}: #{s.health}" }}"  # Debugging output
 
     # Place ships for the user
     user = User.new
     user.place_ships(ships)
     @player_board = user.board  # Assign player's board here.
-    puts "DEBUG: Player board ships: #{@player_board.ships.map(&:name)}"  # Debugging output
+    puts "DEBUG: Player board ships: #{@player_board.ships.map { |s| "#{s.name}: #{s.health}" }}"  # Debugging output
 
     render_boards(user)
 

@@ -30,7 +30,7 @@ class Board
       @cells[coordinate].place_ship(ship)
     end
     @ships << ship unless @ships.include?(ship)
-    puts "DEBUG: Added ship #{ship.name} to board. Current ships: #{@ships.map(&:name)}"  # Debugging output
+    puts "DEBUG: Ship #{ship.name} placed on board with health #{ship.health}"  # Debugging output
   end
 
   def fire_upon(coordinate)
