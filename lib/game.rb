@@ -51,12 +51,6 @@ class Game
     user.place_ships(ships)
     render_boards(user)
 
-    # Debugging output
-    puts 'Player board after placing ships:'
-    puts user.board.render(true)
-    puts 'Computer board after placing ships:'
-    puts @computer_board.render(true)
-
     play_game(user)
   end
 
