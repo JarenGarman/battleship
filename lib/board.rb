@@ -30,6 +30,25 @@ class Board
     end
   end
 
+  def fire_upon(coordinate)
+    if valid_coordinate?(coordinate)
+      @cells[coordinate].fire_upon
+      if @cells[coordinate].empty?
+        'miss'
+      elsif @cells[coordinate].ship.sunk?
+        'sunk'
+      else
+        'hit'
+      end
+    else
+      'invalid'
+    end
+  end
+
+  def all_ships_sunk?
+    @cells.values.all? { |cell| cell.ship.nil? || cell.ship.sunk? }
+  end
+
   def render(show_ships = false)
     rendered_board = "  " + @columns.join(" ") + "\n"
     @rows.each do |row|
@@ -44,28 +63,17 @@ class Board
     rendered_board.rstrip
   end
 
-  def fire_upon(coordinate)
-    if valid_coordinate?(coordinate)
-      @cells[coordinate].fire_upon
-      return @cells[coordinate].render
-    end
-    "invalid"
-  end
-
-  def all_ships_sunk?
-    @cells.values.all? { |cell| cell.ship.nil? || cell.ship.sunk? }
-  end
-
   private
 
   def generate_board
-    coords = []
+    board = {}
     @rows.each do |row|
       @columns.each do |column|
-        coords << "#{row}#{column}"
+        coordinate = "#{row}#{column}"
+        board[coordinate] = Cell.new(coordinate)
       end
     end
-    coords.map { |coord| [coord, Cell.new(coord)] }.to_h
+    board
   end
 
   def are_consecutive?(coordinates)
