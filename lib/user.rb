@@ -17,6 +17,7 @@ class User
         coordinates = gets.chomp.split
       end
       @board.place(ship, coordinates)
+      puts "DEBUG: Placed #{ship.name} at #{coordinates.inspect}"  # Debugging output
       render_board
     end
   end

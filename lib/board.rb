@@ -31,10 +31,11 @@ class Board
 
   def fire_upon(coordinate)
     if valid_coordinate?(coordinate)
-      @cells[coordinate].fire_upon
-      return @cells[coordinate].render
+      cell = @cells[coordinate]
+      cell.fire_upon
+    else
+      puts "Invalid coordinate: #{coordinate}"
     end
-    "invalid"
   end
 
   def all_ships_sunk?
