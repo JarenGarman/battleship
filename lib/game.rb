@@ -129,5 +129,6 @@ class Game
     elsif @computer_board.all_ships_sunk?
       puts "You won! All enemy ships have been sunk."
     end
+    start
   end
 end
