@@ -115,10 +115,8 @@ class Game
 
   def game_over?
     if @player_board.all_ships_sunk?
-      puts "You lost! All your ships have been sunk."
       true
     elsif @computer_board.all_ships_sunk?
-      puts "You won! All enemy ships have been sunk."
       true
     else
       false
@@ -128,7 +126,7 @@ class Game
   def display_winner
     if @player_board.all_ships_sunk?
       puts "You lost! All your ships have been sunk."
-    else
+    elsif @computer_board.all_ships_sunk?
       puts "You won! All enemy ships have been sunk."
     end
   end
