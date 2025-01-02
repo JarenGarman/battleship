@@ -51,7 +51,7 @@ class Game
     user.place_ships(ships)
     render_boards(user)
 
-    play_game(user)  # Pass the user argument to play_game
+    play_game(user)
   end
 
   def render_boards(user)
@@ -65,11 +65,9 @@ class Game
     loop do
       render_boards(user)
       player_turn
-      render_boards(user)
       break if game_over?
 
       computer_turn
-      render_boards(user)
       break if game_over?
     end
     display_winner
@@ -131,6 +129,5 @@ class Game
     elsif @computer_board.all_ships_sunk?
       puts "You won! All enemy ships have been sunk."
     end
-    start
   end
 end
