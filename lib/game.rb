@@ -65,26 +65,28 @@ class Game
       render_boards(user)
 
       # Player's turn
-      puts "Your turn:"
+      puts "\nYour turn:"
       player_shot_result = player_turn
       puts player_shot_result
 
       # Check if the player has won
       if @computer_board.all_ships_sunk?
-        puts "You won! All enemy ships have been sunk."
+        puts "\nYou won! All enemy ships have been sunk."
         break
       end
 
       # Computer's turn
-      puts "My turn:"
+      puts "\nMy turn:"
       computer_shot_result = computer_turn
       puts computer_shot_result
 
       # Check if the computer has won
       if @player_board.all_ships_sunk?
-        puts "You lost! All your ships have been sunk."
+        puts "\nYou lost! All your ships have been sunk."
         break
       end
+
+      puts
     end
     display_winner
   end
@@ -153,9 +155,9 @@ class Game
 
   def display_winner
     if @player_board.all_ships_sunk?
-      puts "You lost! All your ships have been sunk."
+      puts "\nYou lost! All your ships have been sunk."
     elsif @computer_board.all_ships_sunk?
-      puts "You won! All enemy ships have been sunk."
+      puts "\nYou won! All enemy ships have been sunk."
     end
   end
 end
