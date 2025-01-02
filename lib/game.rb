@@ -36,13 +36,29 @@ class Game
   end
 
   def start_game
-    setup_game
-    play_game
+    puts 'Starting game...'
+    cruiser = Ship.new('Cruiser', 3)
+    submarine = Ship.new('Submarine', 2)
+    ships = [cruiser, submarine]
+
+    cpu = Computer.new
+    cpu.place_ships(ships)
+    puts 'I have laid out my ships on the grid.'
+    puts 'You now need to lay out your two ships.'
+    puts 'The Cruiser is three units long and the Submarine is two units long.'
+
+    user = User.new
+    user.place_ships(ships)
+    render_boards(user)
+
+    play_game(user)  # Pass the user argument to play_game
   end
 
-  def setup_game
-    # Setup ships on both boards
-    # Example: player_board.place_ship(Ship.new('Cruiser', 3), ['A1', 'A2', 'A3'])
+  def render_boards(user)
+    puts '=============COMPUTER BOARD============='
+    puts @computer_board.render
+    puts '==============PLAYER BOARD=============='
+    puts user.board.render(true)
   end
 
   def play_game(user)
@@ -59,13 +75,6 @@ class Game
     display_winner
   end
 
-  def render_boards(user)
-    puts '=============COMPUTER BOARD============='
-    puts @computer_board.render
-    puts '==============PLAYER BOARD=============='
-    puts user.board.render(true)
-  end
-
   def player_turn
     coordinate = nil
     loop do
@@ -80,21 +89,22 @@ class Game
       end
     end
     result = @computer_board.fire_upon(coordinate)
-    @player_shots << coordinate  # Add to shots only after firing
-    puts "DEBUG: Player shot coordinates: #{@player_shots.inspect}"
+    @player_shots << coordinate
     puts "Your shot on #{coordinate} was a #{result}."
   end
 
   def computer_turn
-    coordinate = nil
-    loop do
-      coordinate = random_coordinate
-      break unless @computer_shots.include?(coordinate)
-    end
+    coordinate = get_random_coordinate
     result = @player_board.fire_upon(coordinate)
     @computer_shots << coordinate
-    puts "DEBUG: Computer shot coordinates: #{@computer_shots.inspect}"
     puts "My shot on #{coordinate} was a #{result}."
+  end
+
+  def get_random_coordinate
+    loop do
+      coordinate = random_coordinate
+      return coordinate unless @computer_shots.include?(coordinate)
+    end
   end
 
   def random_coordinate
@@ -104,14 +114,23 @@ class Game
   end
 
   def game_over?
-    @player_board.all_ships_sunk? || @computer_board.all_ships_sunk?
+    if @player_board.all_ships_sunk?
+      puts "You lost! All your ships have been sunk."
+      true
+    elsif @computer_board.all_ships_sunk?
+      puts "You won! All enemy ships have been sunk."
+      true
+    else
+      false
+    end
   end
 
   def display_winner
     if @player_board.all_ships_sunk?
       puts "You lost! All your ships have been sunk."
-    else
+    elsif @computer_board.all_ships_sunk?
       puts "You won! All enemy ships have been sunk."
     end
+    start
   end
 end
