@@ -51,6 +51,12 @@ class Game
     user.place_ships(ships)
     render_boards(user)
 
+    # Debugging output
+    puts 'Player board after placing ships:'
+    puts user.board.render(true)
+    puts 'Computer board after placing ships:'
+    puts @computer_board.render(true)
+
     play_game(user)
   end
 
@@ -115,8 +121,10 @@ class Game
 
   def game_over?
     if @player_board.all_ships_sunk?
+      puts "You lost! All your ships have been sunk."
       true
     elsif @computer_board.all_ships_sunk?
+      puts "You won! All enemy ships have been sunk."
       true
     else
       false
