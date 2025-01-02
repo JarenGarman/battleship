@@ -30,17 +30,15 @@ class Cell
     @ship.hit if @ship # calls the hit method on the ship if the cell is not empty
   end
 
-  def render(show_ships = false)
+  def render(show_ship = false)
     if fired_upon?
       if empty?
-        'M'
-      elsif @ship.sunk?
-        'X'
+        "M"
       else
-        'H'
+        @ship.sunk? ? "X" : "H"
       end
     else
-      show_ships && !empty? ? 'S' : '.'
+      show_ship && !empty? ? "S" : "."
     end
   end
 end
