@@ -2,24 +2,20 @@
 class Cell
   attr_reader :coordinate, :ship, :fired_upon
 
-  # (coordinate) is an argument passed to the initialize method - ie "B4"
   def initialize(coordinate)
     @coordinate = coordinate
     @ship = nil
     @fired_upon = false
   end
 
-  # empty? method checks if a cell is empty
   def empty?
     @ship.nil?
   end
 
-  # place_ship method takes a ship as an argument. it's function is to place a ship in a cell
   def place_ship(ship)
     @ship = ship
   end
 
-  # fire_upon method marks a cell as fired upon and returns the result
   def fire_upon
     return :already_fired if @fired_upon
 
@@ -33,7 +29,6 @@ class Cell
     end
   end
 
-  # fired_upon? method checks if a cell has been fired upon
   def fired_upon?
     @fired_upon
   end

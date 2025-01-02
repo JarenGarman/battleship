@@ -50,10 +50,13 @@ class Game
     puts "You now need to lay out your two ships."
     puts "The Cruiser is three units long and the Submarine is two units long."
 
-    # Place ships for the user
+    # Display the empty player board
     user = User.new
-    user.place_ships(ships)
     @player_board = user.board  # Assign player's board here.
+    render_boards(user)
+
+    # Place ships for the user
+    user.place_ships(ships)
 
     play_game(user)
   end
