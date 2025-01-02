@@ -37,37 +37,49 @@ class Game
 
   def start_game
     setup_game
-    play_game
   end
 
   def setup_game
-    # Setup ships on both boards
     cruiser = Ship.new('Cruiser', 3)
     submarine = Ship.new('Submarine', 2)
-    @player_board.place(cruiser, ['A1', 'A2', 'A3'])
-    @player_board.place(submarine, ['B1', 'B2'])
-    puts "DEBUG: Player board ships: #{@player_board.ships.map(&:name).inspect}"
+    ships = [cruiser, submarine]
+
+    # Place ships for the computer
+    cpu = Computer.new
+    cpu.place_ships(ships)
+    puts 'I have laid out my ships on the grid.'
+    puts 'You now need to lay out your two ships.'
+    puts 'The Cruiser is three units long and the Submarine is two units long.'
+
+    # Place ships for the user
+    user = User.new
+    user.place_ships(ships)
+    puts "DEBUG: Player's ships placed: #{user.board.render(true)}"  # Debugging output
+    render_boards(user)
+
+    # Start the game with the user
+    play_game(user)
   end
 
-  def play_game
-    loop do
-      render_boards
-      player_turn
-      render_boards
-      break if game_over?
-
-      computer_turn
-      render_boards
-      break if game_over?
-    end
-    display_winner
-  end
-
-  def render_boards
+  def render_boards(user)
     puts '=============COMPUTER BOARD============='
     puts @computer_board.render
     puts '==============PLAYER BOARD=============='
-    puts @player_board.render(true)
+    puts user.board.render(true)
+  end
+
+  def play_game(user)
+    loop do
+      render_boards(user)
+      player_turn
+      render_boards(user)
+      break if game_over?
+
+      computer_turn
+      render_boards(user)
+      break if game_over?
+    end
+    display_winner
   end
 
   def player_turn
