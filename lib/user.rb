@@ -21,6 +21,10 @@ class User
       puts "DEBUG: Current ships on board: #{@board.ships.map(&:name).inspect}"  # Debugging output
       render_board
     end
+    # Additional debugging output after all ships are placed
+    puts "DEBUG: Player's board after placing ships:"
+    puts @board.render(true)
+    puts "DEBUG: Ships on player's board: #{@board.ships.map { |ship| { name: ship.name, sunk: ship.sunk? } }}"
   end
 
   def render_board
