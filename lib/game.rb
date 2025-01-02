@@ -49,6 +49,7 @@ class Game
 
     user = User.new
     user.place_ships(ships)
+    puts "Player's ships placed: #{user.board.render(true)}"
     render_boards(user)
 
     play_game(user)
