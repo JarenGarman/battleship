@@ -21,6 +21,7 @@ class Cell
 
   # fire_upon method marks a cell as fired upon
   def fire_upon
+    puts "DEBUG: Firing upon cell #{coordinate}."
     @fired_upon = true
     @ship.hit if @ship # calls the hit method on the ship if the cell is not empty
   end

@@ -37,6 +37,7 @@ class Board
 
   def fire_upon(coordinate)
     if valid_coordinate?(coordinate)
+      puts "DEBUG: Firing upon #{coordinate} on the board."
       @cells[coordinate].fire_upon
       return @cells[coordinate].render
     end
