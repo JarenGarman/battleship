@@ -9,14 +9,14 @@ class Cell
     @fired_upon = false
   end
 
-  # empty? method checks if a cell is empty
-  def empty?
-    @ship.nil?
-  end
-
   # place_ship method takes a ship as an argument. it's function is to place a ship in a cell
   def place_ship(ship)
     @ship = ship
+  end
+
+  # empty? method checks if a cell is empty
+  def empty?
+    @ship.nil?
   end
 
   # fired_upon? method checks if a cell has been fired upon
@@ -27,7 +27,7 @@ class Cell
   # fire_upon method marks a cell as fired upon
   def fire_upon
     @fired_upon = true
-    @ship.hit unless empty? # calls the hit method on the ship if the cell is not empty
+    @ship.hit if @ship # calls the hit method on the ship if the cell is not empty
   end
 
   def render(show_ships = false)

@@ -68,14 +68,4 @@ class Board
     end
     board
   end
-
-  def are_consecutive?(coordinates)
-    rows = coordinates.map { |coordinate| coordinate[0] }.sort
-    cols = coordinates.map { |coordinate| coordinate[1] }.sort
-    (rows.uniq.size == 1 && all_consecutive?(cols)) || (cols.uniq.size == 1 && all_consecutive?(rows))
-  end
-
-  def all_consecutive?(coords)
-    coords.each_cons(2).all? { |current_coord, next_coord| next_coord.ord == current_coord.ord + 1 }
-  end
 end
