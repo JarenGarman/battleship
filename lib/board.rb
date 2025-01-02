@@ -24,11 +24,11 @@ class Board
 
   def place(ship, coordinates)
     return unless valid_placement?(ship, coordinates)
+
     coordinates.each do |coordinate|
       @cells[coordinate].place_ship(ship)
     end
     @ships << ship
-    end
   end
 
   def fire_upon(coordinate)
@@ -39,7 +39,7 @@ class Board
       puts "Invalid coordinate: #{coordinate}"
     end
   end
-    @ships.all?(&:sunk?)
+
   def all_ships_sunk?
     @cells.values.all? { |cell| cell.ship.nil? || cell.ship.sunk? }
   end
