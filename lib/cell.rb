@@ -17,30 +17,23 @@ class Cell
   end
 
   def fire_upon
-    return :already_fired if @fired_upon
-
     @fired_upon = true
-    if @ship
-      @ship.hit
-      return @ship.sunk? ? :sunk : :hit
-    else
-      return :miss
-    end
+    @ship.hit if @ship
   end
 
   def fired_upon?
     @fired_upon
   end
 
-  def render(reveal = false)
-    if @fired_upon
-      return "X" if @ship&.sunk? # Mark sunk ship parts
-      return "H" if @ship        # Mark hit ship parts
-      "M"                        # Mark missed shots
-    elsif reveal && @ship
-      "S" # Show ship when reveal flag is true
+  def render(show_ship = false)
+    if fired_upon?
+      if empty?
+        "M"
+      else
+        @ship.sunk? ? "X" : "H"
+      end
     else
-      "."
+      show_ship && !empty? ? "S" : "."
     end
   end
 end
