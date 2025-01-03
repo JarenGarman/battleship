@@ -17,9 +17,12 @@ class Cell
   end
 
   def fire_upon
+    return :already_fired if @fired_upon
+
     @fired_upon = true
     if @ship
       @ship.hit
+      puts "DEBUG: Ship #{@ship.name} hit. Health: #{@ship.health}"  # Debugging output
       return @ship.sunk? ? :sunk : :hit
     else
       return :miss

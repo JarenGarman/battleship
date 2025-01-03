@@ -80,14 +80,13 @@ class Game
 
       # Player's turn
       player_shot_result = player_turn
-      puts
       puts player_shot_result
       puts '----------------------------------------'
 
       # Check if the player has won
       if @computer_board.all_ships_sunk?
         puts "\nYou won! All enemy ships have been sunk."
-        break
+        return
       end
 
       # Add a blank line between player's shot result and computer's shot
@@ -101,12 +100,11 @@ class Game
       # Check if the computer has won
       if @player_board.all_ships_sunk?
         puts "\nYou lost! All your ships have been sunk."
-        break
+        return
       end
 
       puts
     end
-    display_winner
   end
 
   def player_turn
