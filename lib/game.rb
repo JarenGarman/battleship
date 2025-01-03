@@ -105,7 +105,7 @@ class Game
   end
 
   def computer_turn
-    coordinate = get_random_coordinate
+    coordinate = computer_shot
     result = fire_shot(coordinate, @player_board)
     handle_result("My", result, coordinate, @player_board)
   end
@@ -163,6 +163,17 @@ class Game
     rows = ('A'..'D').to_a
     columns = (1..4).to_a
     "#{rows.sample}#{columns.sample}"
+  end
+
+  def computer_shot
+    valid_shots = all_coordinates - @computer_shots
+    coordinate = valid_shots.sample
+    @computer_shots << coordinate
+    coordinate
+  end
+
+  def all_coordinates
+    @player_board.cells.keys
   end
 
   def game_over?
