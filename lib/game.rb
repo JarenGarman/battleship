@@ -86,9 +86,21 @@ class Game
     display_winner
   end
 
+  def player_shot(coordinate)
+    if @computer_board.ships.any? { |ship| ship.positions.include?(coordinate) }
+      puts "DEBUG: Your shot on #{coordinate} hit!"
+      # Handle hit logic here
+      result = "hit"
+    else
+      puts "DEBUG: Your shot on #{coordinate} missed."
+      result = "miss"
+    end
+    result
+  end
+
   def player_turn
     coordinate = get_valid_coordinate
-    result = fire_shot(coordinate, @computer_board)
+    result = player_shot(coordinate)
     handle_result("Your", result, coordinate, @computer_board)
   end
 
