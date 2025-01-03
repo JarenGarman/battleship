@@ -22,7 +22,6 @@ class Cell
     @fired_upon = true
     if @ship
       @ship.hit
-      puts "DEBUG: Ship #{@ship.name} hit. Health: #{@ship.health}"  # Debugging output
       return @ship.sunk? ? :sunk : :hit
     else
       return :miss
@@ -33,15 +32,15 @@ class Cell
     @fired_upon
   end
 
-  def render(show_ship = false)
-    if fired_upon?
-      if empty?
-        "M"
-      else
-        @ship.sunk? ? "X" : "H"
-      end
+  def render(reveal = false)
+    if @fired_upon
+      return "X" if @ship&.sunk? # Mark as sunk
+      return "H" if @ship        # Mark as hit
+      return "M"                 # Mark as miss
+    elsif reveal && @ship
+      "S" # Reveal ship if flag is true
     else
-      show_ship && !empty? ? "S" : "."
+      "."
     end
   end
 end

@@ -4,11 +4,14 @@ class Ship
   def initialize(name, length)
     @name = name
     @length = length
-    @health = length
+    @health = length # Health matches ship length
   end
 
   def hit
-    @health -= 1 if @health > 0
+    if @health > 0
+      @health -= 1
+      puts "DEBUG: Ship #{@name} hit. Health: #{@health}"
+    end
   end
 
   def sunk?
