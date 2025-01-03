@@ -50,10 +50,10 @@ class Game
     puts "You now need to lay out your two ships."
     puts "The Cruiser is three units long and the Submarine is two units long."
 
-    # Display the empty player board
+    # Display the empty player board grid
     user = User.new
     @player_board = user.board  # Assign player's board here.
-    render_boards(user)
+    render_grid(@player_board)
 
     # Place ships for the user
     user.place_ships(ships)
@@ -69,13 +69,17 @@ class Game
     puts '----------------------------------------'
   end
 
+  def render_grid(board)
+    puts board.render(true)
+    puts '----------------------------------------'
+  end
+
   def play_game(user)
     loop do
       render_boards(user)
 
       # Player's turn
       player_shot_result = player_turn
-      puts
       puts player_shot_result
       puts '----------------------------------------'
 
@@ -101,7 +105,6 @@ class Game
 
       puts
     end
-    display_winner
   end
 
   def player_turn
@@ -166,11 +169,11 @@ class Game
     player_lost || computer_lost
   end
 
-  def display_winner
-    if @player_board.all_ships_sunk?
-      puts "\nYou lost! All your ships have been sunk."
-    elsif @computer_board.all_ships_sunk?
-      puts "\nYou won! All enemy ships have been sunk."
-    end
-  end
+  # def display_winner
+  #   if @player_board.all_ships_sunk?
+  #     puts "You lost! All your ships have been sunk."
+  #   elsif @computer_board.all_ships_sunk?
+  #     puts "You won! All enemy ships have been sunk."
+  #   end
+  # end
 end

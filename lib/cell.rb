@@ -17,15 +17,12 @@ class Cell
   end
 
   def fire_upon
-    return :already_fired if @fired_upon
-
     @fired_upon = true
     if @ship
       @ship.hit
-      return :sunk if @ship.sunk?
-      :hit
+      return @ship.sunk? ? :sunk : :hit
     else
-      :miss
+      return :miss
     end
   end
 

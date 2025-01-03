@@ -8,10 +8,12 @@ class Ship
     @health = length
   end
 
+  # Decrease health by 1 if health is greater than 0
   def hit
     @health -= 1 if @health > 0
   end
 
+  # Check if the ship is sunk (health is 0 or less)
   def sunk?
     @health <= 0
   end

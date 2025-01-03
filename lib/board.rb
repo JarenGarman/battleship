@@ -38,7 +38,7 @@ class Board
   end
 
   def all_ships_sunk?
-    @ships.all?(&:sunk?)
+    @cells.values.select(&:ship).all? { |cell| cell.ship.sunk? }
   end
 
   def render(show_ships = false)
