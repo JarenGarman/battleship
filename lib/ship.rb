@@ -4,7 +4,7 @@ class Ship
   def initialize(name, length)
     @name = name
     @length = length
-    @health = length # Health matches ship length
+    @health = length # Health initialized to match length
   end
 
   def hit

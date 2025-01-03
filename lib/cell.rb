@@ -34,11 +34,11 @@ class Cell
 
   def render(reveal = false)
     if @fired_upon
-      return "X" if @ship&.sunk? # Mark as sunk
-      return "H" if @ship        # Mark as hit
-      return "M"                 # Mark as miss
+      return "X" if @ship&.sunk? # Mark sunk ship parts
+      return "H" if @ship        # Mark hit ship parts
+      "M"                        # Mark missed shots
     elsif reveal && @ship
-      "S" # Reveal ship if flag is true
+      "S" # Show ship when reveal flag is true
     else
       "."
     end

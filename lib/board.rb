@@ -32,13 +32,18 @@ class Board
   end
 
   def fire_upon(coordinate)
-    if valid_coordinate?(coordinate)
-      @cells[coordinate].fire_upon
+    cell = @cells[coordinate]
+    if cell.fired_upon?
+      "already_fired"
+    else
+      result = cell.fire_upon
+      return result == :sunk ? "sunk" : "hit" if cell.ship
+      "miss"
     end
   end
 
   def all_ships_sunk?
-    @cells.values.select(&:ship).all? { |cell| cell.ship.sunk? }
+    @ships.all?(&:sunk?)
   end
 
   def render(show_ships = false)

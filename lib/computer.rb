@@ -10,33 +10,36 @@ class Computer
 
   def place_ships(ships)
     ships.each do |ship|
-      coordinates = get_valid_coordinates(ship)
-      @board.place(ship, coordinates)
+      placed = false
+      until placed
+        start_coordinate = random_coordinate
+        direction = [:horizontal, :vertical].sample
+        coordinates = generate_coordinates(start_coordinate, ship.length, direction)
+        if @board.valid_placement?(ship, coordinates)
+          @board.place(ship, coordinates)
+          placed = true
+        end
+      end
     end
   end
 
   private
 
-  def get_valid_coordinates(ship)
-    loop do
-      coordinates = generate_random_coordinates(ship.length)
-      return coordinates if @board.valid_placement?(ship, coordinates)
-    end
+  def random_coordinate
+    rows = ('A'..'D').to_a
+    cols = (1..4).to_a
+    "#{rows.sample}#{cols.sample}"
   end
 
-  def generate_random_coordinates(length)
-    rows = ('A'..'D').to_a
-    columns = (1..4).to_a
-    orientation = [:horizontal, :vertical].sample
+  def generate_coordinates(start, length, direction)
+    row, col = start.chars
+    row_index = ('A'..'D').to_a.index(row)
+    col_index = col.to_i - 1
 
-    if orientation == :horizontal
-      row = rows.sample
-      start_col = columns.sample(length).sort
-      start_col.map { |col| "#{row}#{col}" }
+    if direction == :horizontal
+      (0...length).map { |i| "#{('A'..'D').to_a[row_index]}#{col_index + i + 1}" }
     else
-      col = columns.sample
-      start_row = rows.sample(length).sort
-      start_row.map { |row| "#{row}#{col}" }
+      (0...length).map { |i| "#{('A'..'D').to_a[row_index + i]}#{col_index + 1}" }
     end
   end
 end
