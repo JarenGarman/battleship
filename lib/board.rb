@@ -42,17 +42,26 @@ class Board
     end
   end
 
+  def cell_ship(coordinate)
+    @cells[coordinate].ship
+  end
+
   def all_ships_sunk?
     @ships.all?(&:sunk?)
   end
 
   def render(show_ships = false)
-    "  " + @columns.join(" ") + "\n" +
-      @rows.map do |row|
-        "#{row} " + @columns.map do |col|
-          @cells["#{row}#{col}"].render(show_ships)
-        end.join(" ")
-      end.join("\n")
+    rendered_board = "  " + @columns.join(" ") + "\n"
+    @rows.each do |row|
+      rendered_board += row + " "
+      @columns.each do |column|
+        coordinate = "#{row}#{column}"
+        rendered_board += @cells[coordinate].render(show_ships) + " "
+      end
+      rendered_board.rstrip!
+      rendered_board += "\n"
+    end
+    rendered_board.rstrip
   end
 
   private
