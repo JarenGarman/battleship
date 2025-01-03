@@ -1,46 +1,42 @@
 require_relative 'board'
 require_relative 'ship'
 
-# The enemy of the player
 class Computer
   attr_reader :board
 
-  def initialize(board = Board.new)
-    @board = board
+  def initialize
+    @board = Board.new
   end
 
   def place_ships(ships)
     ships.each do |ship|
-      @board.place(ship, rand_coordinates(ship))
+      coordinates = get_valid_coordinates(ship)
+      @board.place(ship, coordinates)
     end
   end
 
   private
 
-  def rand_coordinates(ship)
-    coords = []
-    h_or_v = [0, 1]
-    until @board.valid_placement?(ship, coords)
-      horizontal, vertical = h_or_v.shuffle
-      start_coord = generate_start_coord(ship.length, horizontal, vertical)
-      coords = generate_remaining_coords(ship.length, horizontal, vertical, start_coord)
+  def get_valid_coordinates(ship)
+    loop do
+      coordinates = generate_random_coordinates(ship.length)
+      return coordinates if @board.valid_placement?(ship, coordinates)
     end
-    coords
   end
 
-  def generate_start_coord(ship_length, horizontal, vertical) # rubocop:disable Metrics/AbcSize
-    @board.cells.values.select do |cell|
-      cell.coordinate[0].ord < (66 + @board.rows.length) - (ship_length * horizontal) &&
-        cell.coordinate[1].to_i < (2 + @board.columns.length) - (ship_length * vertical) &&
-        cell.empty?
-    end.sample.coordinate
-  end
+  def generate_random_coordinates(length)
+    rows = ('A'..'D').to_a
+    columns = (1..4).to_a
+    orientation = [:horizontal, :vertical].sample
 
-  def generate_remaining_coords(ship_length, horizontal, vertical, start_coord)
-    coords = []
-    ship_length.times do |i|
-      coords << "#{(start_coord[0].ord + (i * vertical)).chr}#{start_coord[1].to_i + (i * horizontal)}"
+    if orientation == :horizontal
+      row = rows.sample
+      start_col = columns.sample(length).sort
+      start_col.map { |col| "#{row}#{col}" }
+    else
+      col = columns.sample
+      start_row = rows.sample(length).sort
+      start_row.map { |row| "#{row}#{col}" }
     end
-    coords
   end
 end
