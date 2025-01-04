@@ -3,14 +3,19 @@ require_relative 'ship'
 
 # The enemy of the player
 class Computer
-  attr_reader :board
+  attr_reader :board, :ships
 
   def initialize(board = Board.new)
     @board = board
+    @ships = []
   end
 
-  def place_ships(ships)
-    ships.each do |ship|
+  def add_ships(ships)
+    ships.map { |ship| @ships << ship }
+  end
+
+  def place_ships
+    @ships.each do |ship|
       @board.place(ship, rand_coordinates(ship))
     end
   end

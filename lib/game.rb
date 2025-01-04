@@ -35,13 +35,13 @@ class Game # rubocop:disable Metrics/ClassLength
     puts
     ships = [['Cruiser', 3], ['Submarine', 2]]
     @computer = Computer.new
-    @computer_ships = ships.map { |ship| Ship.new(ship[0], ship[1]) }
-    @computer.place_ships(@computer_ships)
+    @computer.add_ships(ships.map { |ship| Ship.new(ship[0], ship[1]) })
+    @computer.place_ships
     puts "I have laid out my ships on the grid.\nYou now need to lay out your two ships.\nThe Cruiser is three units long and the Submarine is two units long.\n" # rubocop:disable Layout/LineLength
     puts
     @player = Player.new
-    @player_ships = ships.map { |ship| Ship.new(ship[0], ship[1]) }
-    @player.place_ships(@player_ships)
+    @player.add_ships(ships.map { |ship| Ship.new(ship[0], ship[1]) })
+    @player.place_ships
     puts
     play_game
   end
