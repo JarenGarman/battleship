@@ -1,6 +1,8 @@
 require_relative 'board'
 require_relative 'ship'
 
+DEBUG_MODE = false
+
 class Computer
   attr_reader :board
 
@@ -18,24 +20,18 @@ class Computer
         if @board.valid_placement?(ship, coordinates)
           place_ship(ship, coordinates, direction)
           placed = true
-          puts "DEBUG: Computer ship #{ship.name} placed at #{coordinates.inspect}"
-          puts "DEBUG: Computer ships after placing #{ship.name}: #{@board.ships.map(&:positions).inspect}"
+          puts "DEBUG: Computer ship #{ship.name} placed at #{coordinates.inspect}" if DEBUG_MODE
+          puts "DEBUG: Computer ships after placing #{ship.name}: #{@board.ships.map(&:positions).inspect}" if DEBUG_MODE
         end
       end
     end
   end
 
   def place_computer_ships
-    cruiser_positions = ["B1", "C1", "D1"] # Example positions
-    submarine_positions = ["A4", "B4"]
-
-    cruiser = Ship.new("Cruiser", cruiser_positions.size)
-    submarine = Ship.new("Submarine", submarine_positions.size)
-
-    @board.place(cruiser, cruiser_positions)
-    @board.place(submarine, submarine_positions)
-
-    puts "DEBUG: Computer ships placed: #{@board.ships.map(&:positions).inspect}"
+    cruiser = Ship.new("Cruiser", 3)
+    submarine = Ship.new("Submarine", 2)
+    ships = [cruiser, submarine]
+    place_ships(ships)
   end
 
   private
@@ -67,6 +63,7 @@ class Computer
     coordinates.each do |coordinate|
       @board.cells[coordinate].place_ship(ship)
     end
+    ship.positions = coordinates
     @board.ships << ship
   end
 end

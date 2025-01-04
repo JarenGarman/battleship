@@ -1,6 +1,8 @@
 require_relative 'cell'
 
 class Board
+  DEBUG_MODE = false
+
   attr_accessor :ships
   attr_reader :cells, :rows, :columns
 
@@ -27,7 +29,7 @@ class Board
   end
 
   def place(ship, coordinates)
-    puts "Placing #{ship.name} at #{coordinates.inspect}"
+    puts "Placing #{ship.name} at #{coordinates.inspect}" if DEBUG_MODE
     if valid_placement?(ship, coordinates)
       coordinates.each do |coordinate|
         @cells[coordinate].place_ship(ship)
@@ -35,15 +37,22 @@ class Board
       ship.positions = coordinates
       @ships << ship
       coordinates.each { |pos| mark_grid(pos, "S") }
-      puts "DEBUG: #{ship.name} placed at #{coordinates.inspect}"
+      puts "DEBUG: #{ship.name} placed at #{coordinates.inspect}" if DEBUG_MODE
     else
-      puts "DEBUG: Invalid placement for #{ship.name} at #{coordinates.inspect}"
+      puts "DEBUG: Invalid placement for #{ship.name} at #{coordinates.inspect}" if DEBUG_MODE
     end
   end
 
   def fire_upon(coordinate)
     if valid_coordinate?(coordinate)
       @cells[coordinate].fire_upon
+      if @cells[coordinate].ship.nil?
+        puts "DEBUG: Miss at #{coordinate}" if DEBUG_MODE
+        return "miss"
+      else
+        puts "DEBUG: Hit at #{coordinate}" if DEBUG_MODE
+        return "hit"
+      end
     end
   end
 
@@ -64,7 +73,8 @@ class Board
   end
 
   def all_ships_sunk?
-    !@ships.empty? && @ships.all?(&:sunk?)
+    puts "DEBUG: Checking if all ships are sunk: #{@ships.all?(&:sunk?)}" if DEBUG_MODE
+    @ships.all?(&:sunk?)
   end
 
   def render(show_ships = false)

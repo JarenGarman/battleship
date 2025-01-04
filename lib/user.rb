@@ -30,7 +30,7 @@ class User
   end
 
   def parse_coordinates(input)
-    coordinates = input.split.map { |coord| convert_to_grid(coord) }
+    coordinates = input.split.map { |coord| convert_to_grid(coord.upcase) }
     puts "Parsed coordinates: #{coordinates.inspect}"
     coordinates
   end

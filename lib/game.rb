@@ -3,6 +3,8 @@ require_relative 'user'
 require_relative 'board'
 require_relative 'ship'
 
+DEBUG_MODE = false
+
 # Play the game!
 class Game
   attr_reader :player_board, :computer_board
@@ -42,7 +44,7 @@ class Game
     ships = [cruiser, submarine]
 
     cpu = Computer.new
-    cpu.place_computer_ships
+    cpu.place_ships(ships)
     puts 'I have laid out my ships on the grid.'
     puts 'You now need to lay out your two ships.'
     puts 'The Cruiser is three units long and the Submarine is two units long.'
@@ -53,11 +55,7 @@ class Game
     user.place_ships(ships)
     render_boards
 
-    # Debugging logs
-    puts "Player ships placed: #{@player_board.ships.map(&:positions).inspect}"
-    puts "Computer ships placed: #{@computer_board.ships.map(&:positions).inspect}"
-
-    play_game(user)
+    play_game
   end
 
   def render_empty_player_board
@@ -74,40 +72,37 @@ class Game
     puts '----------------------------------------'
   end
 
-  def play_game(user)
+  def play_game
     loop do
-      render_boards
+      display_game_state
+
+      # Player's turn
       player_turn
-      break if game_over?
+      break if check_win_condition
 
+      puts '----------------------------------------'
+
+      # Computer's turn
       computer_turn
-      break if game_over?
-    end
-    display_winner
-  end
+      break if check_win_condition
 
-  def player_shot(coordinate)
-    if @computer_board.ships.any? { |ship| ship.positions.include?(coordinate) }
-      puts "DEBUG: Your shot on #{coordinate} hit!"
-      # Handle hit logic here
-      result = "hit"
-    else
-      puts "DEBUG: Your shot on #{coordinate} missed."
-      result = "miss"
+      puts '----------------------------------------'
     end
-    result
+    exit_game
   end
 
   def player_turn
     coordinate = get_valid_coordinate
-    result = player_shot(coordinate)
+    result = fire_shot(coordinate, @computer_board)
     handle_result("Your", result, coordinate, @computer_board)
+    display_game_state
   end
 
   def computer_turn
-    coordinate = computer_shot
+    coordinate = get_random_coordinate
     result = fire_shot(coordinate, @player_board)
     handle_result("My", result, coordinate, @player_board)
+    display_game_state
   end
 
   def fire_shot(coordinate, board)
@@ -123,16 +118,17 @@ class Game
     case result
     when "hit"
       ship = board.cell_ship(coordinate)
-      puts "DEBUG: #{player} shot on #{coordinate} hit #{ship.name}. Health: #{ship.health}"
+      puts "DEBUG: #{player} shot on #{coordinate} hit #{ship.name}. Health: #{ship.health}" if DEBUG_MODE
       if ship.sunk?
-        puts "DEBUG: #{ship.name} has been sunk!"
+        puts "DEBUG: #{ship.name} has been sunk!" if DEBUG_MODE
+        check_victory if player == "Your"
       end
       puts "#{player} shot on #{coordinate} was a hit!"
     when "miss"
-      puts "DEBUG: #{player} shot on #{coordinate} missed."
+      puts "DEBUG: #{player} shot on #{coordinate} missed." if DEBUG_MODE
       puts "#{player} shot on #{coordinate} was a miss."
     when "already_fired"
-      puts "DEBUG: #{player} shot on #{coordinate} was already fired upon."
+      puts "DEBUG: #{player} shot on #{coordinate} was already fired upon." if DEBUG_MODE
       puts "#{player} shot on #{coordinate} has already been fired upon."
     end
   end
@@ -165,27 +161,8 @@ class Game
     "#{rows.sample}#{columns.sample}"
   end
 
-  def computer_shot
-    valid_shots = all_coordinates - @computer_shots
-    coordinate = valid_shots.sample
-    @computer_shots << coordinate
-    coordinate
-  end
-
-  def all_coordinates
-    @player_board.cells.keys
-  end
-
   def game_over?
-    if @player_board.all_ships_sunk?
-      puts "You lost! All your ships have been sunk."
-      true
-    elsif @computer_board.all_ships_sunk?
-      puts "You won! All enemy ships have been sunk."
-      true
-    else
-      false
-    end
+    @player_board.all_ships_sunk? || @computer_board.all_ships_sunk?
   end
 
   def display_winner
@@ -194,11 +171,42 @@ class Game
     elsif @computer_board.all_ships_sunk?
       puts "You won! All enemy ships have been sunk."
     end
+    exit_game
   end
 
-  def print_ship_status(ships)
-    ships.each do |ship|
-      puts "DEBUG: #{ship.name} status: Sunk=#{ship.sunk?}"
+  def check_victory
+    puts "DEBUG: Checking if all computer ships are sunk: #{@computer_board.all_ships_sunk?}" if DEBUG_MODE
+    puts "DEBUG: Computer ships remaining: #{@computer_board.ships.reject(&:sunk?).map(&:name).inspect}" if DEBUG_MODE
+    if @computer_board.all_ships_sunk?
+      puts "You won! All enemy ships have been sunk."
+      exit_game
+    elsif @player_board.all_ships_sunk?
+      puts "You lost! All your ships have been sunk."
+      exit_game
     end
+  end
+
+  def check_win_condition
+    if @computer_board.all_ships_sunk?
+      puts "You won! All enemy ships have been sunk."
+      return true
+    elsif @player_board.all_ships_sunk?
+      puts "You lost! All your ships have been sunk."
+      return true
+    end
+    false
+  end
+
+  def exit_game
+    puts "Exiting game..."
+    exit
+  end
+
+  def display_game_state
+    puts '=============COMPUTER BOARD============='
+    puts @computer_board.render
+    puts '==============PLAYER BOARD=============='
+    puts @player_board.render(true)
+    puts '----------------------------------------'
   end
 end
