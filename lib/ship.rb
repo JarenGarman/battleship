@@ -12,8 +12,8 @@ class Ship
     @positions = coordinates
   end
 
-  def hit(coordinate)
-    @hits += 1 if @positions.include?(coordinate)
+  def hit
+    @hits += 1
   end
 
   def sunk?

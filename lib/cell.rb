@@ -18,7 +18,7 @@ class Cell
 
   def fire_upon
     @fired_upon = true
-    @ship.hit(@coordinate) if @ship
+    @ship.hit if @ship
   end
 
   def fired_upon?
@@ -26,14 +26,13 @@ class Cell
   end
 
   def render(show_ship = false)
-    if fired_upon?
-      if empty?
-        "M"
-      else
-        @ship.sunk? ? "X" : "H"
-      end
+    if @fired_upon
+      return "X" if @ship && @ship.sunk?
+      return "H" if @ship
+      "M"
     else
-      show_ship && !empty? ? "S" : "."
+      return "S" if show_ship && @ship
+      "."
     end
   end
 end

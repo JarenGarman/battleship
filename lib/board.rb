@@ -1,96 +1,106 @@
 require_relative 'cell'
 
 class Board
-  attr_reader :cells, :rows, :columns, :ships
+  attr_reader :cells, :ships
 
-  def initialize(dimensions = { length: 4, width: 4 })
-    @rows = (65..(64 + dimensions[:length])).to_a.map(&:chr)
-    @columns = (1..dimensions[:width]).to_a
-    @cells = generate_board
-    @cells_by_row = @cells.values.group_by { |cell| cell.coordinate[0] }
+  def initialize(size = 4)
+    @cells = create_cells(size)
     @ships = []
   end
 
-  def valid_coordinate?(coordinate)
-    @cells.key?(coordinate)
+  def render(show_ships = false)
+    "  1 2 3 4\n" +
+    "A #{row_render('A', show_ships)}\n" +
+    "B #{row_render('B', show_ships)}\n" +
+    "C #{row_render('C', show_ships)}\n" +
+    "D #{row_render('D', show_ships)}\n"
   end
 
-  def valid_placement?(ship, coordinates)
-    coordinates.all? { |coordinate| valid_coordinate?(coordinate) } &&
-      coordinates.size == ship.length &&
-      coordinates.all? { |coordinate| @cells[coordinate].empty? } &&
-      are_consecutive?(coordinates)
+  def render_hidden
+    "  1 2 3 4\n" +
+    "A #{row_render('A', false)}\n" +
+    "B #{row_render('B', false)}\n" +
+    "C #{row_render('C', false)}\n" +
+    "D #{row_render('D', false)}\n"
   end
 
   def place(ship, coordinates)
-    return unless valid_placement?(ship, coordinates)
-
-    coordinates.each do |coordinate|
-      @cells[coordinate].place_ship(ship)
+    if valid_placement?(ship, coordinates)
+      coordinates.each do |coordinate|
+        @cells[coordinate].place_ship(ship)
+      end
+      ship.positions = coordinates
+      @ships << ship
+      true
+    else
+      false
     end
-    @ships << ship unless @ships.include?(ship)
   end
 
   def fire_upon(coordinate)
-    cell = @cells[coordinate]
-    if cell.fired_upon?
-      "already_fired"
-    else
-      cell.fire_upon
-      return cell.ship.nil? ? "miss" : "hit"
+    row, col = coordinate_to_indices(coordinate)
+    if valid_coordinate?(coordinate) && @cells[coordinate].render != 'M' && @cells[coordinate].render != 'X'
+      if @cells[coordinate].render == 'S'
+        ship = find_ship_at(row, col)
+        ship.hit(coordinate)
+      end
+      @cells[coordinate].fire_upon
     end
-  end
-
-  def cell_ship(coordinate)
-    @cells[coordinate].ship
   end
 
   def cell_at(coordinate)
     @cells[coordinate]
   end
 
+  def cell_ship(coordinate)
+    @cells[coordinate].ship
+  end
+
   def all_ships_sunk?
     @ships.all?(&:sunk?)
   end
 
-  def render(show_ships = false)
-    rendered_board = "  " + @columns.join(" ") + "\n"
-    @rows.each do |row|
-      rendered_board += row + " "
-      @columns.each do |column|
-        coordinate = "#{row}#{column}"
-        rendered_board += @cells[coordinate].render(show_ships) + " "
-      end
-      rendered_board.rstrip!
-      rendered_board += "\n"
+  public
+
+  def valid_placement?(ship, coordinates)
+    return false if coordinates.size != ship.length
+
+    coordinates.each do |coordinate|
+      return false unless valid_coordinate?(coordinate) && @cells[coordinate].empty?
     end
-    rendered_board.rstrip
+
+    rows = coordinates.map { |coord| coord[0] }
+    cols = coordinates.map { |coord| coord[1..-1].to_i }
+
+    rows.uniq.size == 1 || cols.uniq.size == 1
+  end
+
+  def valid_coordinate?(coordinate)
+    @cells.key?(coordinate)
+  end
+
+  def coordinate_to_indices(coordinate)
+    row = coordinate[0].ord - 'A'.ord
+    col = coordinate[1..-1].to_i - 1
+    [row, col]
   end
 
   private
 
-  def generate_board
-    coords = []
-    @rows.each do |row|
-      @columns.each do |column|
-        coords << "#{row}#{column}"
-      end
-    end
-    coords.map { |coord| [coord, Cell.new(coord)] }.to_h
+  def row_render(row, show_ships)
+    (1..4).map { |col| @cells["#{row}#{col}"].render(show_ships) }.join(" ")
   end
 
-  def are_consecutive?(coordinates)
-    rows = coordinates.map { |coordinate| coordinate[0] }
-    cols = coordinates.map { |coordinate| coordinate[1..-1].to_i }
+  def create_cells(size)
+    ("A".."D").flat_map do |row|
+      (1..size).map do |col|
+        coord = "#{row}#{col}"
+        [coord, Cell.new(coord)]
+      end
+    end.to_h
+  end
 
-    if rows.uniq.size == 1
-      # All coordinates are in the same row, check if columns are consecutive
-      cols.each_cons(2).all? { |a, b| b == a + 1 }
-    elsif cols.uniq.size == 1
-      # All coordinates are in the same column, check if rows are consecutive
-      rows.each_cons(2).all? { |a, b| b.ord == a.ord + 1 }
-    else
-      false
-    end
+  def find_ship_at(row, col)
+    @ships.find { |ship| ship.positions.include?("#{('A'.ord + row).chr}#{col + 1}") }
   end
 end

@@ -68,7 +68,7 @@ class Game
 
   def render_boards(player)
     puts '=============COMPUTER BOARD============='
-    puts @computer_board.render
+    puts @computer_board.render_hidden
     puts '==============PLAYER BOARD=============='
     puts player.board.render(true)
     puts '----------------------------------------'
@@ -156,12 +156,11 @@ class Game
     when "hit"
       puts "#{player} shot on #{coordinate} was a hit!"
       ship = board.cell_ship(coordinate)
-      if ship.sunk?
+      if ship && ship.sunk?
         puts "#{ship.name} has been sunk!"
-        # Update the board to show the sunk ship's position
         ship.positions.each do |pos|
           row, col = board.coordinate_to_indices(pos)
-          board.cells[pos].place_ship(ship) # Ensure the cell shows the sunk ship
+          board.grid[row][col] = 'X'
         end
       end
     when "miss"
