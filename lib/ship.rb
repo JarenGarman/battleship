@@ -1,20 +1,22 @@
-# Create a ship with a name and a length. Ship is sunk once health equals 0.
 class Ship
-  attr_reader :name, :length, :health
+  attr_reader :name, :length, :positions, :health
 
   def initialize(name, length)
     @name = name
     @length = length
+    @positions = []
     @health = length
   end
 
-  def sunk?
-    @health.zero?
+  def positions=(coordinates)
+    @positions = coordinates
   end
 
   def hit
-    return if sunk?
+    @health -= 1 if @health > 0
+  end
 
-    @health -= 1
+  def sunk?
+    @health <= 0
   end
 end
