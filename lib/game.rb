@@ -131,6 +131,7 @@ class Game # rubocop:disable Metrics/ClassLength
   end
 
   def display_winner
+    render_boards
     puts
     if @player.ships.all?(&:sunk?)
       puts 'You lost! All your ships have been sunk.'
