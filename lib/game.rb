@@ -112,6 +112,7 @@ class Game # rubocop:disable Metrics/ClassLength
   def get_valid_coordinate # rubocop:disable Metrics/MethodLength,Naming/AccessorMethodName
     loop do
       puts 'Enter the coordinate for your shot (e.g., B2):'
+      puts
       coordinate = gets.chomp.upcase
       if !@computer.board.valid_coordinate?(coordinate)
         puts 'Please enter a valid coordinate (e.g., B2):'
@@ -130,6 +131,7 @@ class Game # rubocop:disable Metrics/ClassLength
   end
 
   def display_winner
+    puts
     if @player_ships.all?(&:sunk?)
       puts 'You lost! All your ships have been sunk.'
     else
