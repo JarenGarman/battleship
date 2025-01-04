@@ -59,17 +59,17 @@ class Game # rubocop:disable Metrics/ClassLength
     puts
   end
 
-  def play_game # rubocop:disable Metrics/MethodLength,Metrics/CyclomaticComplexity,Metrics/PerceivedComplexity
-    until @computer_ships.all?(&:sunk?) || @player_ships.all?(&:sunk?)
+  def play_game # rubocop:disable Metrics/MethodLength,Metrics/CyclomaticComplexity,Metrics/PerceivedComplexity,Metrics/AbcSize
+    until @computer.ships.all?(&:sunk?) || @player.ships.all?(&:sunk?)
       render_boards
       player_turn
-      break if @computer_ships.all?(&:sunk?)
+      break if @computer.ships.all?(&:sunk?)
 
       puts
       puts '----------------------------------------'
       puts
       computer_turn
-      break if @player_ships.all?(&:sunk?)
+      break if @player.ships.all?(&:sunk?)
 
       puts
       puts '----------------------------------------'
@@ -132,7 +132,7 @@ class Game # rubocop:disable Metrics/ClassLength
 
   def display_winner
     puts
-    if @player_ships.all?(&:sunk?)
+    if @player.ships.all?(&:sunk?)
       puts 'You lost! All your ships have been sunk.'
     else
       puts 'You won! All enemy ships have been sunk.'
