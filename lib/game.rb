@@ -159,8 +159,7 @@ class Game
       if ship && ship.sunk?
         puts "#{ship.name} has been sunk!"
         ship.positions.each do |pos|
-          row, col = board.coordinate_to_indices(pos)
-          board.grid[row][col] = 'X'
+          board.cell_at(pos).fire_upon
         end
       end
     when "miss"

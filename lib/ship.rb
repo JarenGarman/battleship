@@ -1,11 +1,11 @@
 class Ship
-  attr_reader :name, :length, :positions, :hits
+  attr_reader :name, :length, :positions, :health
 
   def initialize(name, length)
     @name = name
     @length = length
     @positions = []
-    @hits = 0
+    @health = length
   end
 
   def positions=(coordinates)
@@ -13,10 +13,10 @@ class Ship
   end
 
   def hit
-    @hits += 1
+    @health -= 1 if @health > 0
   end
 
   def sunk?
-    @hits == @length
+    @health <= 0
   end
 end
