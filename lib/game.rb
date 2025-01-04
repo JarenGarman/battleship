@@ -158,6 +158,11 @@ class Game
       ship = board.cell_ship(coordinate)
       if ship.sunk?
         puts "#{ship.name} has been sunk!"
+        # Update the board to show the sunk ship's position
+        ship.positions.each do |pos|
+          row, col = board.coordinate_to_indices(pos)
+          board.cells[pos].place_ship(ship) # Ensure the cell shows the sunk ship
+        end
       end
     when "miss"
       puts "#{player} shot on #{coordinate} was a miss."
