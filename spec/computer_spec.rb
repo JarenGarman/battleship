@@ -29,6 +29,7 @@ RSpec.describe Computer do
 
   describe '#place_ships' do
     it 'places submarine and cruiser' do
+      computer.add_ships(ships)
       computer.place_ships
 
       expect(computer.board.render(true).count('S')).to eq(5)
