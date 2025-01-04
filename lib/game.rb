@@ -3,8 +3,6 @@ require_relative 'player'
 require_relative 'board'
 require_relative 'ship'
 
-DEBUG_MODE = false
-
 # Play the game!
 class Game
   attr_reader :player_board, :computer_board
@@ -45,7 +43,6 @@ class Game
 
     cpu = Computer.new
     cpu.place_ships(@computer_board)
-    debug_computer_ships if DEBUG_MODE
     puts 'I have laid out my ships on the grid.'
     puts 'You now need to lay out your two ships.'
     puts 'The Cruiser is three units long and the Submarine is two units long.'
@@ -57,13 +54,6 @@ class Game
     render_boards(player)
 
     play_game(player)
-  end
-
-  def debug_computer_ships
-    puts "DEBUG: Computer ships:"
-    @computer_board.ships.each_with_index do |ship, index|
-      puts "  Ship #{index + 1}: #{ship.positions} (Sunk? #{ship.sunk?})"
-    end
   end
 
   def render_boards(player)
@@ -108,7 +98,6 @@ class Game
 
       puts
     end
-    display_winner
   end
 
   def player_turn
