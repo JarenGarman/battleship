@@ -1,32 +1,22 @@
 class Ship
-  attr_reader :name, :size, :positions, :hits
+  attr_reader :name, :length, :positions, :hits
 
-  def initialize(name, size)
+  def initialize(name, length)
     @name = name
-    @size = size
+    @length = length
     @positions = []
-    @hits = []
-  end
-
-  def length
-    @size
+    @hits = 0
   end
 
   def positions=(coordinates)
     @positions = coordinates
   end
 
-  def sunk?
-    puts "DEBUG: Checking if ship #{@name} is sunk: #{@positions.all? { |position| @hits.include?(position) }}" if DEBUG_MODE
-    @positions.all? { |position| @hits.include?(position) }
+  def hit(coordinate)
+    @hits += 1 if @positions.include?(coordinate)
   end
 
-  def hit(position)
-    if @positions.include?(position)
-      @hits << position
-      puts "Hit at position #{position}"
-    else
-      puts "Miss at position #{position}"
-    end
+  def sunk?
+    @hits == @length
   end
 end

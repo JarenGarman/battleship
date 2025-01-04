@@ -1,10 +1,7 @@
 require_relative 'cell'
 
 class Board
-  DEBUG_MODE = false
-
-  attr_accessor :ships
-  attr_reader :cells, :rows, :columns
+  attr_reader :cells, :rows, :columns, :ships
 
   def initialize(dimensions = { length: 4, width: 4 })
     @rows = (65..(64 + dimensions[:length])).to_a.map(&:chr)
@@ -12,9 +9,6 @@ class Board
     @cells = generate_board
     @cells_by_row = @cells.values.group_by { |cell| cell.coordinate[0] }
     @ships = []
-    @grid = Array.new(dimensions[:length]) { Array.new(dimensions[:width], ".") }
-    puts "Board initialized with dimensions: #{dimensions.inspect}"
-    puts "Cells: #{@cells.keys.inspect}"
   end
 
   def valid_coordinate?(coordinate)
@@ -29,39 +23,22 @@ class Board
   end
 
   def place(ship, coordinates)
-    puts "Placing #{ship.name} at #{coordinates.inspect}" if DEBUG_MODE
-    if valid_placement?(ship, coordinates)
-      coordinates.each do |coordinate|
-        @cells[coordinate].place_ship(ship)
-      end
-      ship.positions = coordinates
-      @ships << ship
-      coordinates.each { |pos| mark_grid(pos, "S") }
-      puts "DEBUG: #{ship.name} placed at #{coordinates.inspect}" if DEBUG_MODE
-    else
-      puts "DEBUG: Invalid placement for #{ship.name} at #{coordinates.inspect}" if DEBUG_MODE
+    return unless valid_placement?(ship, coordinates)
+
+    coordinates.each do |coordinate|
+      @cells[coordinate].place_ship(ship)
     end
+    @ships << ship unless @ships.include?(ship)
   end
 
   def fire_upon(coordinate)
-    if valid_coordinate?(coordinate)
-      @cells[coordinate].fire_upon
-      if @cells[coordinate].ship.nil?
-        puts "DEBUG: Miss at #{coordinate}" if DEBUG_MODE
-        return "miss"
-      else
-        puts "DEBUG: Hit at #{coordinate}" if DEBUG_MODE
-        return "hit"
-      end
+    cell = @cells[coordinate]
+    if cell.fired_upon?
+      "already_fired"
+    else
+      cell.fire_upon
+      return cell.ship.nil? ? "miss" : "hit"
     end
-  end
-
-  def mark_hit(coordinate)
-    @cells[coordinate].fire_upon
-  end
-
-  def mark_miss(coordinate)
-    @cells[coordinate].fire_upon
   end
 
   def cell_ship(coordinate)
@@ -73,7 +50,6 @@ class Board
   end
 
   def all_ships_sunk?
-    puts "DEBUG: Checking if all ships are sunk: #{@ships.all?(&:sunk?)}" if DEBUG_MODE
     @ships.all?(&:sunk?)
   end
 
@@ -94,14 +70,13 @@ class Board
   private
 
   def generate_board
-    board = {}
+    coords = []
     @rows.each do |row|
       @columns.each do |column|
-        coordinate = "#{row}#{column}"
-        board[coordinate] = Cell.new(coordinate)
+        coords << "#{row}#{column}"
       end
     end
-    board
+    coords.map { |coord| [coord, Cell.new(coord)] }.to_h
   end
 
   def are_consecutive?(coordinates)
@@ -117,11 +92,5 @@ class Board
     else
       false
     end
-  end
-
-  def mark_grid(position, marker)
-    row = position[0].ord - 65
-    col = position[1..-1].to_i - 1
-    @grid[row][col] = marker
   end
 end
