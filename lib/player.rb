@@ -25,7 +25,7 @@ class Player
   private
 
   def get_valid_coordinates(ship) # rubocop:disable Metrics/AbcSize
-    puts "Enter the squares for the #{ship.name} (#{ship.length} spaces):"
+    puts "Enter the squares for the #{ship.name} (#{ship.length} spaces) separated by spaces (e.g., A1 A2 A3):"
     coordinates = gets.chomp.upcase.split
     puts
     until @board.valid_placement?(ship, coordinates)

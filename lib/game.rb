@@ -66,8 +66,7 @@ class Game # rubocop:disable Metrics/ClassLength
     @computer = Computer.new(Board.new(dimensions))
     @computer.add_ships(game_ships.map { |ship| Ship.new(ship[0], ship[1]) })
     @computer.place_ships
-    puts "I have laid out my ships on the grid.\nYou now need to lay out your ships:\n"
-    puts
+    puts "I have laid out my ships on the grid.\nYou now need to lay out your ships:\n\n"
     game_ships.each do |ship|
       puts "#{ship[0]}: #{ship[1]} spaces"
     end
