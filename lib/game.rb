@@ -16,11 +16,11 @@ class Game # rubocop:disable Metrics/ClassLength
   private
 
   @ships = {
-    Carrier: ['Carrier', 5],
-    Battleship: ['Battleship', 4],
-    Cruiser: ['Cruiser', 3],
-    Submarine: ['Submarine', 3],
-    Destroyer: ['Destroyer', 2]
+    carrier: ['Carrier', 5],
+    battleship: ['Battleship', 4],
+    cruiser: ['Cruiser', 3],
+    submarine: ['Submarine', 3],
+    destroyer: ['Destroyer', 2]
   }.freeze
 
   class << self
@@ -49,7 +49,7 @@ class Game # rubocop:disable Metrics/ClassLength
     puts "Please select your game size. Enter 'm' for mini or 'c' for classic."
     case gets.chomp.downcase
     when 'm'
-      start_game({ length: 4, width: 4 }, [ships[:Cruiser], ships[:Destroyer]])
+      start_game({ length: 4, width: 4 }, [ships[:cruiser], ships[:destroyer]])
     when 'c'
       start_game({ length: 10, width: 10 }, ships.values)
     else
