@@ -18,21 +18,43 @@ class Player
     @ships.each do |ship|
       puts @board.render(true)
       puts
-      @board.place(ship, get_valid_coordinates(ship))
+      coordinates = get_valid_coordinates(ship)
+      return if coordinates.nil?
+
+      @board.place(ship, coordinates)
     end
   end
 
   private
 
   def get_valid_coordinates(ship) # rubocop:disable Metrics/AbcSize
-    puts "Enter the squares for the #{ship.name} (#{ship.length} spaces) separated by spaces (e.g., A1 A2 A3):"
-    coordinates = gets.chomp.upcase.split
-    puts
-    until @board.valid_placement?(ship, coordinates)
-      puts "Invalid coordinates. Please enter the squares for the #{ship.name} (#{ship.length} spaces):"
-      coordinates = gets.chomp.upcase.split
-      puts
+    loop do
+      puts "Enter the squares for the #{ship.name} (#{ship.length} spaces) separated by spaces (e.g., A1 A2 A3), 'q' to quit, or 'm' for main menu:"
+      input = gets.chomp.upcase
+      case input
+      when 'Q'
+        exit_game
+      when 'M'
+        start
+        return nil
+      else
+        coordinates = input.split
+        if @board.valid_placement?(ship, coordinates)
+          return coordinates
+        else
+          puts "Invalid coordinates. Please enter the squares for the #{ship.name} (#{ship.length} spaces), 'q' to quit, or 'm' for main menu:"
+        end
+      end
     end
-    coordinates
+  end
+
+  def exit_game
+    puts
+    puts 'Exiting game...'
+    exit
+  end
+
+  def start
+    Game.new.start
   end
 end
