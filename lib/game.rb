@@ -7,12 +7,9 @@ require_relative 'ship'
 class Game # rubocop:disable Metrics/ClassLength
   def start
     puts
-    puts
-    puts
     puts 'Welcome to BATTLESHIP'
     puts
     puts "Enter 'p' to play. Enter 'q' to quit."
-    puts
     handle_main_menu_input
   end
 
@@ -67,7 +64,6 @@ class Game # rubocop:disable Metrics/ClassLength
 
       puts
       puts '----------------------------------------'
-      puts
       computer_turn
       break if @player.ships.all?(&:sunk?)
 
@@ -81,6 +77,8 @@ class Game # rubocop:disable Metrics/ClassLength
   def player_turn
     coordinate = get_valid_coordinate
     result = fire_shot(coordinate, @computer.board)
+    puts
+    puts '----------------------------------------'
     handle_result('Your', 'My', result, coordinate, @computer.board)
   end
 
@@ -112,13 +110,14 @@ class Game # rubocop:disable Metrics/ClassLength
   def get_valid_coordinate # rubocop:disable Metrics/MethodLength,Naming/AccessorMethodName
     loop do
       puts 'Enter the coordinate for your shot (e.g., B2):'
-      puts
       coordinate = gets.chomp.upcase
       if !@computer.board.valid_coordinate?(coordinate)
-        puts 'Please enter a valid coordinate (e.g., B2):'
+        puts
+        puts 'Please enter a valid coordinate.'
         next
       elsif @computer.board.cells[coordinate].fired_upon?
-        puts "You have already fired on #{coordinate}. Please enter a new coordinate:"
+        puts
+        puts "You have already fired on #{coordinate}. Please enter a new coordinate."
         next
       else
         return coordinate
@@ -139,6 +138,7 @@ class Game # rubocop:disable Metrics/ClassLength
       puts 'You won! All enemy ships have been sunk.'
     end
     puts
+    puts '----------------------------------------'
     start
   end
 

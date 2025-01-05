@@ -24,13 +24,11 @@ class Player
 
   private
 
-  def get_valid_coordinates(ship) # rubocop:disable Metrics/AbcSize,Metrics/MethodLength
-    puts
+  def get_valid_coordinates(ship) # rubocop:disable Metrics/AbcSize
     puts "Enter the squares for the #{ship.name} (#{ship.length} spaces):"
     coordinates = gets.chomp.upcase.split
     puts
     until @board.valid_placement?(ship, coordinates)
-      puts
       puts "Invalid coordinates. Please enter the squares for the #{ship.name} (#{ship.length} spaces):"
       coordinates = gets.chomp.upcase.split
       puts
