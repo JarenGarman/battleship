@@ -1,11 +1,9 @@
-require 'spec_helper'
+require_relative 'spec_helper'
 
 RSpec.describe Game do
   subject(:game) { described_class.new }
 
-  describe '#start' do #testing only public method for game class
-    it 'starts the game' do
-      expect(game).to respond_to(:start) 
-    end
+  describe '#initialize' do
+    it { is_expected.to be_instance_of described_class }
   end
 end

@@ -10,7 +10,6 @@ require_relative '../lib/cell'
 require_relative '../lib/board'
 require_relative '../lib/game'
 require_relative '../lib/computer'
-require_relative '../lib/user'
+require_relative '../lib/player'
 
 RSpec.configure(&:disable_monkey_patching!)
-

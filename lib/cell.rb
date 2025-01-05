@@ -1,10 +1,9 @@
 # Create a cell with a coordinate. Can add a ship and fire upon.
 class Cell
-  attr_reader :coordinate, :ship, :fired_upon
+  attr_reader :coordinate, :ship
 
   def initialize(coordinate)
     @coordinate = coordinate
-    @ship = nil
     @fired_upon = false
   end
 
@@ -18,21 +17,26 @@ class Cell
 
   def fire_upon
     @fired_upon = true
-    @ship.hit if @ship
+    @ship.hit unless empty?
   end
 
   def fired_upon?
     @fired_upon
   end
 
-  def render(show_ship = false)
-    if @fired_upon
-      return "X" if @ship&.sunk? # Render as 'X' if the ship is sunk.
-      return "H" if @ship        # Render as 'H' if the shot hit a ship but it's not sunk.
-      "M"                        # Render as 'M' if it was a miss.
+  def render(debug = false)
+    if empty?
+      return '.' unless fired_upon?
+
+      'M'
+    elsif fired_upon?
+      return 'H' unless @ship.sunk?
+
+      'X'
     else
-      return "S" if show_ship && @ship
-      "."
+      return '.' unless debug
+
+      'S'
     end
   end
 end
