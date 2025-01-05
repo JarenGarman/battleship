@@ -15,29 +15,64 @@ class Game # rubocop:disable Metrics/ClassLength
 
   private
 
+  @ships = {
+    carrier: ['Carrier', 5],
+    battleship: ['Battleship', 4],
+    cruiser: ['Cruiser', 3],
+    submarine: ['Submarine', 3],
+    destroyer: ['Destroyer', 2]
+  }.freeze
+
+  class << self
+    attr_reader :ships
+  end
+
+  def ships
+    self.class.ships
+  end
+
   def handle_main_menu_input
     case gets.chomp.downcase
     when 'p'
-      start_game
+      select_size
     when 'q'
       exit_game
     else
+      puts
       puts "Invalid input. Please enter 'p' to play or 'q' to quit."
+      handle_main_menu_input
     end
   end
 
-  def start_game # rubocop:disable Metrics/AbcSize,Metrics/MethodLength
+  def select_size # rubocop:disable Metrics/MethodLength
+    puts
+    puts "Please select your game size. Enter 'm' for mini or 'c' for classic."
+    case gets.chomp.downcase
+    when 'm'
+      start_game({ length: 4, width: 4 }, [ships[:cruiser], ships[:destroyer]])
+    when 'c'
+      start_game({ length: 10, width: 10 }, ships.values)
+    else
+      puts
+      puts 'Invalid input.'
+      select_size
+    end
+  end
+
+  def start_game(dimensions, game_ships) # rubocop:disable Metrics/AbcSize,Metrics/MethodLength
     puts
     puts 'Starting game...'
     puts
-    ships = [['Cruiser', 3], ['Submarine', 2]]
-    @computer = Computer.new
-    @computer.add_ships(ships.map { |ship| Ship.new(ship[0], ship[1]) })
+    @computer = Computer.new(Board.new(dimensions))
+    @computer.add_ships(game_ships.map { |ship| Ship.new(ship[0], ship[1]) })
     @computer.place_ships
-    puts "I have laid out my ships on the grid.\nYou now need to lay out your two ships.\nThe Cruiser is three units long and the Submarine is two units long.\n" # rubocop:disable Layout/LineLength
+    puts "I have laid out my ships on the grid.\nYou now need to lay out your ships:\n\n"
+    game_ships.each do |ship|
+      puts "#{ship[0]}: #{ship[1]} spaces"
+    end
     puts
-    @player = Player.new
-    @player.add_ships(ships.map { |ship| Ship.new(ship[0], ship[1]) })
+    @player = Player.new(Board.new(dimensions))
+    @player.add_ships(game_ships.map { |ship| Ship.new(ship[0], ship[1]) })
     @player.place_ships
     puts
     play_game
@@ -130,8 +165,8 @@ class Game # rubocop:disable Metrics/ClassLength
   end
 
   def display_winner
-    render_boards
     puts
+    render_boards
     if @player.ships.all?(&:sunk?)
       puts 'You lost! All your ships have been sunk.'
     else
