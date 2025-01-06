@@ -29,12 +29,12 @@ class Player
 
   def get_valid_coordinates(ship) # rubocop:disable Metrics/AbcSize
     loop do
-      puts "Enter the squares for the #{ship.name} (#{ship.length} spaces) separated by spaces (e.g., A1 A2 A3), 'q' to quit, or 'm' for main menu:"
+      puts "Enter the squares for the #{ship.name} (#{ship.length} spaces) separated by spaces (e.g., A1 A2 A3), 'q' to quit, or 'x' for main menu:"
       input = gets.chomp.upcase
       case input
       when 'Q'
         exit_game
-      when 'M'
+      when 'X'
         start
         return nil
       else
@@ -42,7 +42,7 @@ class Player
         if @board.valid_placement?(ship, coordinates)
           return coordinates
         else
-          puts "Invalid coordinates. Please enter the squares for the #{ship.name} (#{ship.length} spaces), 'q' to quit, or 'm' for main menu:"
+          puts "Invalid coordinates. Please enter the squares for the #{ship.name} (#{ship.length} spaces), 'q' to quit, or 'x' for main menu:"
         end
       end
     end

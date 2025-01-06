@@ -46,7 +46,7 @@ class Game # rubocop:disable Metrics/ClassLength
 
   def select_size # rubocop:disable Metrics/MethodLength
     puts
-    puts "Please select your game size. Enter 'm' for mini or 'c' for classic, 'q' to quit, or 'm' for main menu."
+    puts "Please select your game size. Enter 'm' for mini or 'c' for classic, 'q' to quit, or 'x' for main menu."
     case gets.chomp.downcase
     when 'm'
       start_game({ length: 4, width: 4 }, [ships[:cruiser], ships[:destroyer]])
@@ -54,7 +54,7 @@ class Game # rubocop:disable Metrics/ClassLength
       start_game({ length: 10, width: 10 }, ships.values)
     when 'q'
       exit_game
-    when 'm'
+    when 'x'
       start
     else
       puts
@@ -150,12 +150,12 @@ class Game # rubocop:disable Metrics/ClassLength
 
   def get_valid_coordinate # rubocop:disable Metrics/MethodLength,Naming/AccessorMethodName
     loop do
-      puts "Enter the coordinate for your shot (e.g., B2), 'q' to quit, or 'm' for main menu:"
+      puts "Enter the coordinate for your shot (e.g., B2), 'q' to quit, or 'x' for main menu:"
       input = gets.chomp.upcase
       case input
       when 'Q'
         exit_game
-      when 'M'
+      when 'X'
         start
         return nil
       else
