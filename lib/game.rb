@@ -46,12 +46,16 @@ class Game # rubocop:disable Metrics/ClassLength
 
   def select_size # rubocop:disable Metrics/MethodLength
     puts
-    puts "Please select your game size. Enter 'm' for mini or 'c' for classic."
+    puts "Please select your game size. Enter 'm' for mini or 'c' for classic, 'q' to quit, or 'x' for main menu."
     case gets.chomp.downcase
     when 'm'
       start_game({ length: 4, width: 4 }, [ships[:cruiser], ships[:destroyer]])
     when 'c'
       start_game({ length: 10, width: 10 }, ships.values)
+    when 'q'
+      exit_game
+    when 'x'
+      start
     else
       puts
       puts 'Invalid input.'
@@ -111,6 +115,8 @@ class Game # rubocop:disable Metrics/ClassLength
 
   def player_turn
     coordinate = get_valid_coordinate
+    return if coordinate.nil?
+
     result = fire_shot(coordinate, @computer.board)
     puts
     puts '----------------------------------------'
@@ -144,18 +150,26 @@ class Game # rubocop:disable Metrics/ClassLength
 
   def get_valid_coordinate # rubocop:disable Metrics/MethodLength,Naming/AccessorMethodName
     loop do
-      puts 'Enter the coordinate for your shot (e.g., B2):'
-      coordinate = gets.chomp.upcase
-      if !@computer.board.valid_coordinate?(coordinate)
-        puts
-        puts 'Please enter a valid coordinate.'
-        next
-      elsif @computer.board.cells[coordinate].fired_upon?
-        puts
-        puts "You have already fired on #{coordinate}. Please enter a new coordinate."
-        next
+      puts "Enter the coordinate for your shot (e.g., B2), 'q' to quit, or 'x' for main menu:"
+      input = gets.chomp.upcase
+      case input
+      when 'Q'
+        exit_game
+      when 'X'
+        start
+        return nil
       else
-        return coordinate
+        if !@computer.board.valid_coordinate?(input)
+          puts
+          puts 'Please enter a valid coordinate.'
+          next
+        elsif @computer.board.cells[input].fired_upon?
+          puts
+          puts "You have already fired on #{input}. Please enter a new coordinate."
+          next
+        else
+          return input
+        end
       end
     end
   end
