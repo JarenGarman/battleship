@@ -15,20 +15,14 @@ class Game # rubocop:disable Metrics/ClassLength
 
   private
 
-  @ships = {
-    carrier: ['Carrier', 5],
-    battleship: ['Battleship', 4],
-    cruiser: ['Cruiser', 3],
-    submarine: ['Submarine', 3],
-    destroyer: ['Destroyer', 2]
-  }.freeze
-
-  class << self
-    attr_reader :ships
-  end
-
   def ships
-    self.class.ships
+    {
+      carrier: ['Carrier', 5],
+      battleship: ['Battleship', 4],
+      cruiser: ['Cruiser', 3],
+      submarine: ['Submarine', 3],
+      destroyer: ['Destroyer', 2]
+    }.freeze
   end
 
   def handle_main_menu_input
