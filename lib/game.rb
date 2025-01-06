@@ -44,7 +44,7 @@ class Game # rubocop:disable Metrics/ClassLength
     end
   end
 
-  def select_size # rubocop:disable Metrics/MethodLength
+  def select_size # rubocop:disable Metrics/MethodLength,Metrics/AbcSize
     puts
     puts "Please select your game size. Enter 'm' for mini or 'c' for classic, 'q' to quit, or 'x' for main menu."
     case gets.chomp.downcase
@@ -148,7 +148,7 @@ class Game # rubocop:disable Metrics/ClassLength
     end
   end
 
-  def get_valid_coordinate # rubocop:disable Metrics/MethodLength,Naming/AccessorMethodName
+  def get_valid_coordinate # rubocop:disable Metrics/MethodLength,Naming/AccessorMethodName,Metrics/AbcSize
     loop do
       puts "Enter the coordinate for your shot (e.g., B2), 'q' to quit, or 'x' for main menu:"
       input = gets.chomp.upcase

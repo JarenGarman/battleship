@@ -1,5 +1,6 @@
 require_relative 'ship'
 require_relative 'board'
+require_relative 'game'
 
 # Enemy of the computer
 class Player
@@ -19,7 +20,7 @@ class Player
       puts @board.render(true)
       puts
       coordinates = get_valid_coordinates(ship)
-      return if coordinates.nil?
+      break if coordinates.nil?
 
       @board.place(ship, coordinates)
     end
@@ -27,9 +28,9 @@ class Player
 
   private
 
-  def get_valid_coordinates(ship) # rubocop:disable Metrics/AbcSize
+  def get_valid_coordinates(ship) # rubocop:disable Metrics/MethodLength
     loop do
-      puts "Enter the squares for the #{ship.name} (#{ship.length} spaces) separated by spaces (e.g., A1 A2 A3), 'q' to quit, or 'x' for main menu:"
+      puts "Enter the squares for the #{ship.name} (#{ship.length} spaces) separated by spaces (e.g., A1 A2 A3), 'q' to quit, or 'x' for main menu:" # rubocop:disable Layout/LineLength
       input = gets.chomp.upcase
       case input
       when 'Q'
@@ -39,11 +40,10 @@ class Player
         return nil
       else
         coordinates = input.split
-        if @board.valid_placement?(ship, coordinates)
-          return coordinates
-        else
-          puts "Invalid coordinates. Please enter the squares for the #{ship.name} (#{ship.length} spaces), 'q' to quit, or 'x' for main menu:"
-        end
+        return coordinates if @board.valid_placement?(ship, coordinates)
+
+        puts "Invalid coordinates. Please enter the squares for the #{ship.name} (#{ship.length} spaces), 'q' to quit, or 'x' for main menu:" # rubocop:disable Layout/LineLength
+
       end
     end
   end
