@@ -2,18 +2,18 @@
 
 ## Donte Handy and Jaren Garman
 
-Q:Iteration 3 did not provide an interaction pattern. How did you approach designing this iteration? If you did not get to Iteration 3, reflect on how you think you would’ve approached the design and problem solving process.   
+**Iteration 3 Approach Without a Predefined Interaction Pattern**
 
-A: In the absence of a predefined interaction pattern for Iteration 3, we prioritized a thorough understanding of the project's requirements. We utilized the functional checklist at the bottom of the page as a guide, ensuring that our design decisions aligned with the expected functionality. This iterative process involved research, prototyping, and constant refinement to achieve a user-friendly and effective solution.   
+In the absence of a defined interaction pattern for Iteration 3, our team focused on achieving a comprehensive understanding of the project's requirements. We utilized the functional checklist provided at the bottom of the project page as a guiding tool to ensure that our design decisions were aligned with the expected functionality. This iterative approach involved conducting thorough research, creating prototypes, and continuously refining our work to produce a user-friendly and effective solution.
 
-Q: If you had one more day to work on this project, what would you work on?
+**Considerations for Additional Development Time**
 
-A: With an additional day, we would have explored the implementation of a more advanced feature, such as allowing users to create custom ships. However, due to the anticipated time commitment and the desire to maintain project stability, we prioritized completing the core functionality and ensuring its robustness. We also would have liked to implement a more sophisticated AI for the computer player, as the current version is relatively simple and predictable. This would have involved developing a more advanced strategy for the computer player to make more intelligent decisions and provide a more challenging experience for the user. We also left time to prepare for peer code reviews and address any feedback received and prepare for evaluation.
+If given an additional day to work on the project, we would have aimed to implement more advanced features, such as enabling users to create custom ships. However, considering the anticipated time investment and our commitment to maintaining project stability, we chose to prioritize the completion and robustness of core functionality. Additionally, we envisioned enhancing the computer player's AI to offer a more dynamic experience. This enhancement would involve developing a more sophisticated strategy, empowering the computer player to make smarter decisions and thereby providing a greater challenge to users. We also allocated time for peer code reviews, addressing any feedback received, and preparing for overall project evaluation.
 
-Q: Describe the pairing techniques you used while working on this project.
+**Pairing Techniques Utilized**
 
-A: Our pairing approach was highly collaborative and flexible. We adopted a modified ping-pong pairing approach, engaging in frequent discussions to plan and prioritize tasks. We also incorporated elements of pair programming, working together to solve challenging problems and ensure code quality. In instances where one team member was unable to work, the other would complete a larger task and create a pull request for their partner to review and integrate upon returning. This approach ensured a balanced workload and knowledge sharing.
+Our team employed a highly collaborative and flexible pairing approach throughout the project. We adopted a modified ping-pong pairing technique, engaging in frequent discussions to plan and prioritize our tasks effectively. Additionally, we incorporated elements of pair programming to tackle challenging problems and ensure high code quality. In scenarios where one team member could not participate, the other would take on a larger task and subsequently create a pull request for review and integration once the absent member returned. This strategy promoted a balanced workload and fostered knowledge sharing within the team.
 
-Q: Describe how feedback was shared over the course of this project.
+**Feedback Mechanisms During the Project**
 
-A: Feedback was primarily exchanged during code reviews facilitated by pull requests. This allowed for thorough examination of code changes, identification of potential issues, and constructive discussions. We also utilized code comments to provide quick references, clarify specific aspects of the work, and offer general guidance to each other.
+Feedback was primarily shared through code reviews, facilitated by the use of pull requests. This process allowed for an in-depth examination of code changes, identification of potential issues, and constructive discussions regarding improvements. Furthermore, we utilized code comments to provide quick references, clarify specific aspects of our work, and offer general guidance to one another, enhancing our collaborative effort throughout the project.
