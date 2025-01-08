@@ -3,12 +3,11 @@ require_relative 'ship'
 
 # The enemy of the player
 class Computer
-  attr_reader :board, :ships, :targets
+  attr_reader :board, :ships
 
   def initialize(board = Board.new)
     @board = board
     @ships = []
-    @targets = []
   end
 
   def add_ships(ships)
@@ -21,36 +20,29 @@ class Computer
     end
   end
 
-  def hunt_target
-    if @targets.empty?
-      guess_row, guess_col = guess_random
+  def guess_shot(board)
+    if board.cells.values.any? { |cell| cell.fired_upon? && cell.ship && !cell.ship.sunk? }
+      hunt_target(board)
     else
-      guess_row, guess_col = @targets.pop
+      board.cells.values.reject(&:fired_upon?).sample.coordinate
     end
-
-    cell = @board.cells["#{(65 + guess_row).chr}#{guess_col + 1}"]
-    if cell.fired_upon? && !cell.empty?
-      potential_targets = [
-        [guess_row + 1, guess_col],
-        [guess_row, guess_col + 1],
-        [guess_row - 1, guess_col],
-        [guess_row, guess_col - 1]
-      ]
-
-      potential_targets.each do |target_row, target_col|
-        if target_row.between?(0, @board.rows.length - 1) &&
-           target_col.between?(0, @board.columns.length - 1) &&
-           !@board.cells["#{(65 + target_row).chr}#{target_col + 1}"].fired_upon? &&
-           !@targets.include?([target_row, target_col])
-          @targets << [target_row, target_col]
-        end
-      end
-    end
-
-    [guess_row, guess_col]
   end
 
   private
+
+  def hunt_target(board) # rubocop:disable Metrics/AbcSize,Metrics/MethodLength
+    board.cells.values.select { |cell| cell.fired_upon? && cell.ship && !cell.ship.sunk? }.map do |cell|
+      row = cell.coordinate[0]
+      column = cell.coordinate[1..]
+      above = (row.ord - 1).chr + column
+      below = (row.ord + 1).chr + column
+      left = row + (column.to_i - 1).to_s
+      right = row + (column.to_i + 1).to_s
+      [above, below, left, right].select do |coordinate|
+        board.valid_coordinate?(coordinate) && !board.cells[coordinate].fired_upon?
+      end
+    end.flatten.uniq.sample
+  end
 
   def rand_coordinates(ship)
     coords = []
@@ -77,11 +69,5 @@ class Computer
       coords << "#{(start_coord[0].ord + (i * vertical)).chr}#{start_coord[1].to_i + (i * horizontal)}"
     end
     coords
-  end
-
-  def guess_random
-    row = rand(@board.rows.length)
-    col = rand(@board.columns.length)
-    [row, col]
   end
 end

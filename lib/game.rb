@@ -118,7 +118,7 @@ class Game # rubocop:disable Metrics/ClassLength
   end
 
   def computer_turn
-    coordinate = get_random_coordinate
+    coordinate = @computer.guess_shot(@player.board)
     result = fire_shot(coordinate, @player.board)
     handle_result('My', 'Your', result, coordinate, @player.board)
   end
@@ -166,10 +166,6 @@ class Game # rubocop:disable Metrics/ClassLength
         end
       end
     end
-  end
-
-  def get_random_coordinate # rubocop:disable Naming/AccessorMethodName
-    @player.board.cells.values.reject(&:fired_upon?).sample.coordinate
   end
 
   def display_winner
