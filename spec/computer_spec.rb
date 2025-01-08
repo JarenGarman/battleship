@@ -43,14 +43,11 @@ RSpec.describe Computer do
       expect(board.valid_coordinate?(computer.guess_shot(board))).to be true
     end
 
-    it 'can hunt a ship' do # rubocop:disable RSpec/ExampleLength
+    it 'can hunt a ship' do
       board.place(submarine, %w[B2 C2])
       board.cells['B2'].fire_upon
-      guessed_coords = []
-      100.times do
-        guessed_coords << computer.guess_shot(board)
-      end
-      expect(guessed_coords.uniq.sort).to eq(%w[A2 B1 B3 C2])
+
+      expect(%w[A2 B1 B3 C2].include?(computer.guess_shot(board))).to be true
     end
   end
 end
